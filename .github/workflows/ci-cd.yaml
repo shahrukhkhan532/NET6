@@ -5,6 +5,10 @@ on:
     branches:
       - master
 
+env:
+  DOTNET_VERSION: '6.0.x'
+  AZURE_WEB_APP_NAME: rainers-first-webapp
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -15,9 +19,9 @@ jobs:
       - name: Setup .NET 6 🛠
         uses: actions/setup-dotnet@v2
         with:
-          dotnet-version: '6.0.x'
+          dotnet-version: ${{ env.DOTNET_VERSION }}
 
-      - name: Restore Dependencies
+      - name: Restore Dependencies ⌚
         run: dotnet restore
 
       - name: Build App 🚀
@@ -25,4 +29,14 @@ jobs:
       
       - name: Run automated tests 🧪
         run: dotnet test -c Release --no-build
+      
+      - name: Publish App 📑
+        run: dotnet publish -c Release -o ./out
+      
+      # - name: Deploy to azure web app
+      #   uses: azure/webapp-deploy@v2
+      #   with:
+      #     app-name: ${{ env.AZURE_WEB_APP_NAME }}
+      #     publish-profile: ${{ secrets.AZURE_PUBLISH_SECRET }}
+      #     package: ./out
       
