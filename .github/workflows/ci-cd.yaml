@@ -23,7 +23,7 @@ jobs:
       
       - name: Start SQL Server
         run: |
-        docker run -d -e "ACCEPT_EULA=Y" -e "SA_PASSWORD=Passw0r8" -e "MSSQL_PID=Express" -p 1433:1433 -d mcr.microsoft.com/mssql/server:latest
+          docker run -d -e "ACCEPT_EULA=Y" -e "SA_PASSWORD=Passw0r8" -e "MSSQL_PID=Express" -p 1433:1433 -d mcr.microsoft.com/mssql/server:latest
       
       - name: Sleep for 5 seconds 😴
         uses: jakejarvis/wait-action@master
