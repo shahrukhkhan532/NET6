@@ -3,7 +3,7 @@ name: Continues Integration and Deployment (SRK)
 on:
   push:
     branches:
-      - main
+      - master
 
 jobs:
   build:
@@ -22,4 +22,3 @@ jobs:
 
       - name: Build App 🚀
         run: dotnet build -c Release --no-restore
-        
