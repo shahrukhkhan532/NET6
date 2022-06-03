@@ -8,7 +8,6 @@ public class CustomerControllerTests
     {
         var controller = new CustomerController();
         var result = controller.GetCustomerById(0);
-
         Assert.IsType(result.GetType(), controller?.NotFound());
     }
     [Fact]
