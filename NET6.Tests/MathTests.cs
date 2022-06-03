@@ -18,6 +18,8 @@ public class MathTests
         Assert.Contains(3, result);
         Assert.Contains(5, result);
 
+        // Prefered way to test IEnumerable
         Assert.Equal(new[] { 1, 3, 5 }, result);
+
     }
 }
