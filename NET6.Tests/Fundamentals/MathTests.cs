@@ -1,4 +1,4 @@
-﻿namespace NET6.Tests;
+﻿namespace NET6.Tests.Fundamentals;
 public class MathTests
 {
     [Fact]
@@ -12,7 +12,7 @@ public class MathTests
         Assert.NotEmpty(result);
 
         Assert.Equal(3, result.Count());
-        
+
         // More Specific
         Assert.Contains(1, result);
         Assert.Contains(3, result);

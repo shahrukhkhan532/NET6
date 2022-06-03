@@ -1,4 +1,4 @@
-﻿namespace NET6.Tests;
+﻿namespace NET6.Tests.Fundamentals;
 public class HTMLFormatterTests
 {
     [Fact]
@@ -6,7 +6,7 @@ public class HTMLFormatterTests
     {
         var htmlFormatter = new HTMLFormatter();
         var result = htmlFormatter.FormatAsBold("abc");
-        
+
         //Specific
         Assert.Equal("<strong>abc</strong>", result);
 
