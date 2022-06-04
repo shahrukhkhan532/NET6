@@ -39,11 +39,12 @@ public class DepartmentServicesTests : IDisposable
         var departmentService = new DepartmentServices(_context);
 
         /// Act
-        await departmentService.SaveDepartment(newDepartment);
-
+        var result = await departmentService.SaveDepartment(newDepartment);
         /// Asset
+        /// 
         int expectedCountRecord = DepartmentMockData.GetDepartments().Count + 1;
         _context.Departments.Count().Should().Be(expectedCountRecord);
+        Assert.True(result);
         Assert.Equal(expectedCountRecord, _context.Departments.Count());
     }
     public void Dispose()
