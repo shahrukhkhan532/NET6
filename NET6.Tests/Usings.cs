@@ -8,3 +8,5 @@ global using NET6.Fundamentals;
 global using NET6.Controllers;
 global using Moq;
 global using NET6.Api.Services;
+global using Microsoft.EntityFrameworkCore;
+global using NET6.Api.DataContext;

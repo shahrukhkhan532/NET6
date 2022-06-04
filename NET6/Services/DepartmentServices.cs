@@ -1,4 +1,5 @@
 ﻿namespace NET6.Api.Services;
+using Microsoft.EntityFrameworkCore;
 
 public interface IDepartmentServices
 {
