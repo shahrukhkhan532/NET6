@@ -5,6 +5,7 @@ namespace NET6.Api.Controllers
 {
     [Route("[controller]/[action]")]
     [ApiController]
+    [DisableRequestSizeLimit]
     public class GithubController : ControllerBase
     {
         [HttpPost]
