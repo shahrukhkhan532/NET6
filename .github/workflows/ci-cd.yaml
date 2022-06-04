@@ -1,3 +1,6 @@
+# For auto generating this yaml file for .NET project run these command sequencely
+#dotnet new workflow --search
+#dotnet new --install TimHeuer.GitHubActions.Templates
 name: Continues Integration and Deployment (SRK)
 
 on:
