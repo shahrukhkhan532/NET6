@@ -10,8 +10,12 @@ public class DepartmentController : ControllerBase
     {
         _departmentServices = departmentServices;
     }
-    public IActionResult List()
+    [HttpGet]
+    public async Task<IActionResult> GetList()
     {
-        return Ok(_departmentServices.GetDepartments());
+        var result = await _departmentServices.GetDepartments();
+        if (result.Count == 0)
+            return NoContent();
+        return Ok(result);
     }
 }

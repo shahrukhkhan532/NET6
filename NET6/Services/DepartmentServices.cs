@@ -2,8 +2,8 @@
 
 public interface IDepartmentServices
 {
-    List<Department> GetDepartments();
-    bool SaveDepartment(Department department);
+    Task<List<Department>> GetDepartments();
+    Task<bool> SaveDepartment(Department department);
 }
 public class DepartmentServices : IDepartmentServices
 {
@@ -13,13 +13,13 @@ public class DepartmentServices : IDepartmentServices
     {
         this.context = context;
     }
-    public List<Department> GetDepartments()
+    public async Task<List<Department>> GetDepartments()
     {
-        return this.context.Departments.ToList();
+        return await this.context.Departments.ToListAsync();
     }
-    public bool SaveDepartment(Department department)
+    public async Task<bool> SaveDepartment(Department department)
     {
         this.context.Departments.Add(department);
-        return context.SaveChanges() > 0;
+        return await context.SaveChangesAsync() > 0;
     }
 }
