@@ -19,4 +19,14 @@ public class DepartmentMockData
     {
         return new List<Department>();
     }
+    public static Department AddDepartment()
+    {
+        return new Department()
+        {
+            Department_Code = "12",
+            Department_Name = "BS CS",
+            Department_Description = "Lorem ipsum",
+            FacultyID = 12
+        };
+    }
 }

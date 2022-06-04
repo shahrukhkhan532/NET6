@@ -1,6 +1,5 @@
 ﻿using FluentAssertions;
 using NET6.Tests.MockData;
-using Microsoft.EntityFrameworkCore;
 
 namespace NET6.Tests.Services;
 public class DepartmentServicesTests : IDisposable
@@ -28,6 +27,24 @@ public class DepartmentServicesTests : IDisposable
         /// Assert
         result.Should().HaveCount(DepartmentMockData.GetDepartments().Count);
         Assert.Equal(result.Count, DepartmentMockData.GetDepartments().Count);
+    }
+    [Fact]
+    public async Task SaveDepartment_WhenCalled_ShouldGiveAppropriateCount()
+    {
+        /// Arrange
+        _context.Departments.AddRange(DepartmentMockData.GetDepartments());
+        _context.SaveChanges();
+
+        var newDepartment = DepartmentMockData.AddDepartment();
+        var departmentService = new DepartmentServices(_context);
+
+        /// Act
+        await departmentService.SaveDepartment(newDepartment);
+
+        /// Asset
+        int expectedCountRecord = DepartmentMockData.GetDepartments().Count + 1;
+        _context.Departments.Count().Should().Be(expectedCountRecord);
+        Assert.Equal(expectedCountRecord, _context.Departments.Count());
     }
     public void Dispose()
     {

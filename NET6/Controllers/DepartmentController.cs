@@ -18,4 +18,10 @@ public class DepartmentController : ControllerBase
             return NoContent();
         return Ok(result);
     }
+    [HttpPost]
+    public async Task<IActionResult> SaveAsync(Department department)
+    {
+        await _departmentServices.SaveDepartment(department);
+        return Ok();
+    }
 }

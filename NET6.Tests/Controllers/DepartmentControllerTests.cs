@@ -37,4 +37,18 @@ public class DepartmentControllerTests
         _ = ((NoContentResult)result).StatusCode.Should().Be(204);
         Assert.Equal(204, ((NoContentResult)result).StatusCode);
     }
+    [Fact]
+    public async Task SaveAsync_WhenCalled_ShouldCallServiseSaveMethod()
+    {
+        /// Arrange
+        var departmentService = new Mock<IDepartmentServices>();
+        var newDepartment = DepartmentMockData.AddDepartment();
+        var controller = new DepartmentController(departmentService.Object);
+
+        // Act
+        var result = await controller.SaveAsync(newDepartment);
+
+        // Asset
+        departmentService.Verify(_ => _.SaveDepartment(newDepartment), Times.Exactly(1));
+    }
 }
