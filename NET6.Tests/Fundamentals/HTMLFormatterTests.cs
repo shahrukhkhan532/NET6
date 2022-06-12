@@ -1,4 +1,6 @@
-﻿namespace NET6.Tests.Fundamentals;
+﻿using FluentAssertions;
+
+namespace NET6.Tests.Fundamentals;
 public class HTMLFormatterTests
 {
     [Fact]
@@ -11,8 +13,9 @@ public class HTMLFormatterTests
         Assert.Equal("<strong>abc</strong>", result);
 
         //More General
-        Assert.StartsWith("<strong>", result);
-        Assert.EndsWith("</strong>", result);
-        Assert.Contains("abc", result);
+        //Assert.StartsWith("<strong>", result);
+        //Assert.EndsWith("</strong>", result);
+        //Assert.Contains("abc", result);
+        result.Should().StartWith("<strong>").And.Contain("abc").And.EndWith("</strong>");
     }
 }
