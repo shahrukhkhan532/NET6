@@ -1,6 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc;
-
-namespace NET6.Tests.Controllers;
+﻿namespace NET6.Tests.Controllers;
 public class CustomerControllerTests
 {
     [Fact]

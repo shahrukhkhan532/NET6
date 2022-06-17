@@ -1,9 +1,4 @@
-﻿using FluentAssertions;
-using Microsoft.AspNetCore.Mvc;
-using NET6.Api.Controllers;
-using NET6.Tests.MockData;
-
-namespace NET6.Tests.Controllers;
+﻿namespace NET6.Tests.Controllers;
 public class DepartmentControllerTests
 {
     [Fact]

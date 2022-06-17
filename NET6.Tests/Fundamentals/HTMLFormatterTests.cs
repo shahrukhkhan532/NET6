@@ -1,6 +1,4 @@
-﻿using FluentAssertions;
-
-namespace NET6.Tests.Fundamentals;
+﻿namespace NET6.Tests.Fundamentals;
 public class HTMLFormatterTests
 {
     [Fact]

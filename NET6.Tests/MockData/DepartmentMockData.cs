@@ -1,6 +1,4 @@
-﻿using NET6.Api.Models;
-
-namespace NET6.Tests.MockData;
+﻿namespace NET6.Tests.MockData;
 
 public class DepartmentMockData
 {

@@ -1,7 +1,4 @@
-﻿using FluentAssertions;
-using NET6.Tests.MockData;
-
-namespace NET6.Tests.Services;
+﻿namespace NET6.Tests.Services;
 public class DepartmentServicesTests : IDisposable
 {
     private readonly DataDbContext _context;
