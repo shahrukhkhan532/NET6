@@ -14,6 +14,7 @@ public class DepartmentServicesTests : IDisposable
         _context.Database.EnsureCreated();
     }
     [Fact]
+    [Trait("UI", "Front")]
     public async Task GetDepartments_WhenCalled_ShouldReturnDepartmentCollection()
     {
         /// Arrange
@@ -29,6 +30,7 @@ public class DepartmentServicesTests : IDisposable
         Assert.Equal(result.Count, DepartmentMockData.GetDepartments().Count);
     }
     [Fact]
+    [Trait("UI", "Back")]
     public async Task SaveDepartment_WhenCalled_ShouldGiveAppropriateCount()
     {
         /// Arrange

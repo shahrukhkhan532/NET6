@@ -7,6 +7,7 @@ namespace NET6.Tests.Controllers;
 public class DepartmentControllerTests
 {
     [Fact]
+    [Trait("UI", "Back")]
     public async Task GetList_WhenCalled_ShouldReturn200()
     {
         /// Arrange
@@ -38,6 +39,7 @@ public class DepartmentControllerTests
         Assert.Equal(204, ((NoContentResult)result).StatusCode);
     }
     [Fact]
+    [Trait("UI", "Front")]
     public async Task SaveAsync_WhenCalled_ShouldCallServiseSaveMethod()
     {
         /// Arrange
