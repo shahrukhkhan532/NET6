@@ -18,7 +18,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - name: Check out code 🚓
+      - name: Check Out Code 🚓
         uses: actions/checkout@v3
       
       - name: Setup .NET 6 🛠
@@ -55,18 +55,18 @@ jobs:
       #     app-name: ${{ env.AZURE_WEB_APP_NAME }}
       #     publish-profile: ${{ secrets.AZURE_PUBLISH_SECRET }}
       #     package: ./out
-  linter:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Check out code 🚓
-        uses: actions/checkout@v3
+  # linter:
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - name: Check out code 🚓
+  #       uses: actions/checkout@v3
 
-      - name: Super-Linter 🔗
-        uses: github/super-linter@v4.9.4
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          DISABLE_ERRORS: true
-          OUTPUT_FOLDER: Reports
-          OUTPUT_DETAILS: detailed
-          VALIDATE_ALL_CODEBASE: false
+  #     - name: Super-Linter 🔗
+  #       uses: github/super-linter@v4.9.4
+  #       env:
+  #         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  #         DISABLE_ERRORS: true
+  #         OUTPUT_FOLDER: Reports
+  #         OUTPUT_DETAILS: detailed
+  #         VALIDATE_ALL_CODEBASE: false
 
