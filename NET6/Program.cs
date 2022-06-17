@@ -9,7 +9,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddRazorPages();
 builder.Services.AddDbContext<DataDbContext>(options =>
 {
-    _ = options.UseSqlServer(connectionString: builder.Configuration.GetConnectionString("DataDbConnection"));
+    _ = options.UseSqlServer(connectionString: builder.Configuration.GetConnectionString("DataDbConnection") ?? "");
 });
 builder.Services.AddScoped<IDepartmentServices, DepartmentServices>();
 var app = builder.Build();
