@@ -1,1 +1,1 @@
-select * FROM [TABLE]
+select * FROM [TABLE];
