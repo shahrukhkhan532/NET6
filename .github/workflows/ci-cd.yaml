@@ -46,8 +46,8 @@ jobs:
           ConnectionStrings__DefaultConnection: Server=localhost;Database=CiCdDemo_Test;User=sa;Password=Passw0r8
         run: dotnet test -c Release --no-build
       
-      # - name: Publish App 📑
-      #   run: dotnet publish -c Release -o ./out
+      - name: Publish App 📑
+        run: dotnet publish -c Release -o ./out
       
       # - name: Deploy to azure web app
       #   uses: azure/webapp-deploy@v2
