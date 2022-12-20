@@ -24,3 +24,15 @@ public class DepartmentServices : IDepartmentServices
         return await context.SaveChangesAsync() > 0;
     }
 }
+public class Fake : IDepartmentServices
+{
+    public Task<List<Department>> GetDepartments()
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task<bool> SaveDepartment(Department department)
+    {
+        throw new NotImplementedException();
+    }
+}
