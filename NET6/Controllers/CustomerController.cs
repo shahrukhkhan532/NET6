@@ -1,6 +1,6 @@
 ﻿namespace NET6.Controllers
 {
-    [Route("api/[controller]/[action]")]
+    [Route(template: "api/[controller]/[action]")]
     [ApiController]
     public class CustomerController : ControllerBase
     {
