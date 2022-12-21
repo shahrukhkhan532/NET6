@@ -9,8 +9,10 @@ public class DepartmentController : ControllerBase
     {
         _departmentServices = departmentServices;
     }
-    
+
     [HttpGet]
+    
+    
     public async Task<IActionResult> GetList()
     {
         var result = await _departmentServices.GetDepartments();
