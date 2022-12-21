@@ -2,6 +2,7 @@
 
 public class DepartmentMockData
 {
+    
     public static List<Department> GetDepartments()
     {
         return new List<Department>()
