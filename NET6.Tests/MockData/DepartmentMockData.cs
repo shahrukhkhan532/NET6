@@ -5,7 +5,7 @@ public class DepartmentMockData
     
     public static List<Department> GetDepartments()
     {
-        
+        // sjfg
         return new List<Department>()
         {
             new Department(){ Department_Code = "1", Department_Description = "Description 1", Department_Name = "CS", FacultyID = 1 },
