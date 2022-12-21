@@ -5,7 +5,6 @@
 public class DepartmentController : ControllerBase
 {
     private readonly IDepartmentServices _departmentServices;
-
     public DepartmentController(IDepartmentServices departmentServices)
     {
         _departmentServices = departmentServices;
