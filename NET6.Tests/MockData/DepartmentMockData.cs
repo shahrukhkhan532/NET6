@@ -1,5 +1,6 @@
 ﻿namespace NET6.Tests.MockData;
 
+
 public class DepartmentMockData
 {
     public static List<Department> GetDepartments()
