@@ -6,6 +6,7 @@ public class DepartmentMockData
     {
         return new List<Department>()
         {
+            
             new Department(){ Department_Code = "1", Department_Description = "Description 1", Department_Name = "CS", FacultyID = 1 },
             new Department(){ Department_Code = "2", Department_Description = "Description 2", Department_Name = "Telecom", FacultyID = 1 },
             new Department(){ Department_Code = "3", Department_Description = "Description 3", Department_Name = "science", FacultyID = 1 },
