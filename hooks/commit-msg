@@ -1,0 +1,18 @@
+#!/bin/sh
+echo "❗❕ commit-msg"
+COMMIT_MSG_FILE=$1
+BRANCH_NAME=$(git branch --show-current)
+if [[ $BRANCH_NAME ]]; then
+    if [[ $BRANCH_NAME != @(dev|DEV|Dev|master|Master|qa|QA|Qa) ]]; then
+        array=(${BRANCH_NAME//_/ })
+        if [[ ${#array[@]} -ge 3 ]]; then
+            icons=("🚀" "✔" "🛠" "🎇" "🎆" "✨" "🎉" "🧪" "❄" "🔥" "🎨" "📚" "🐛" "🔖" "⚡" "💥")
+            random=$(( $RANDOM % 15 ))
+            msg=" | JIRA #${array[0]} ${icons[$random]}"
+            value=`cat ${COMMIT_MSG_FILE}`
+            if [[ $value != *"Merge"* && $value != *"merge"* && $value != *"Rebase"* && $value != *"rebase"* && $value != *"squash"* && $value != *"Squash"* ]]; then
+                sed -i " 1 s/.*/&$msg/" $COMMIT_MSG_FILE
+            fi
+        fi
+    fi
+fi
