@@ -15,7 +15,7 @@ env:
   AZURE_WEB_APP_NAME: rainers-first-webapp
 
 jobs:
-  build:
+  build_test_deploy:
     runs-on: ubuntu-latest
     steps:
       - name: Check Out Code 🚓
