@@ -1,0 +1,50 @@
+#!/bin/sh
+#set -x
+Black="\033[0;30m"
+Red="\033[0;31m"
+Green="\033[0;32m"
+Yellow="\033[0;33m"
+Blue="\033[0;34m"
+Purple="\033[0;35m"
+Cyan="\033[0;36m"
+White="\033[0;37m"
+White="\033[0;37m"
+NC='\033[0m'
+echo "❗❕ pre-push"
+
+BRANCH_NAME=$(git branch --show-current)
+if [ $BRANCH_NAME ]; then
+    if [[ $BRANCH_NAME == @(dev|DEV|Dev|qa|QA|Qa) ]]; then
+        cd api
+        echo "Restoring... ⏳";
+        dotnet restore /clp:ErrorsOnly
+        rc=$?
+        if [[ $rc != 0 ]] ; then
+            echo -e "🚫 Failed to restore the project, please fix this and push again. ❌"
+            exit $rc
+        fi
+        echo "Restored successfully ✔"
+        echo "Building... ⏳";
+        dotnet build --no-restore -v q /clp:ErrorsOnly
+        rc=$?
+        if [[ $rc != 0 ]] ; then
+            echo -e "🚫 Failed to build the project, please fix this and push again. ❌"
+            exit $rc
+        fi
+        echo "Build Successfully ✔"
+        cd ..
+    fi
+    if [[ $BRANCH_NAME != @(dev|DEV|Dev|master|Master|qa|QA|Qa) ]]; then
+        array=(${BRANCH_NAME//_/ })
+        res=$(git ls-remote --exit-code --heads origin $BRANCH_NAME)
+        if [[ $res ]]; then
+            echo "Branch exists ✔";
+        else
+            if (( ${#array[@]} == 1 ))
+            then
+                echo "🚫 Please commit some changes and then push.";
+                exit 1
+            fi
+        fi
+    fi
+fi
