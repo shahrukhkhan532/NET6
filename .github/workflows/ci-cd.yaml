@@ -20,6 +20,9 @@ jobs:
     steps:
       - name: Check Out Code 🚓
         uses: actions/checkout@v3
+      - name: Testing Api
+         run:|
+          curl -X GET "https://google.com"
       
       - name: Setup .NET 6 🛠
         uses: actions/setup-dotnet@v2
