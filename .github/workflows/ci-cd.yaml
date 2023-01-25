@@ -3,7 +3,7 @@
 #dotnet new --install TimHeuer.GitHubActions.Templates
 #dotnet new workflow
 
-name: Continues Integration and Deployment (SRK)
+name: Continues Integration and Deployment
 
 on:
   push:
