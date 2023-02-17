@@ -31,4 +31,9 @@ jobs:
       
       - name: Publish App 📑
         run: dotnet publish -c Release -o ./out
+      
+      - name: Deploy to IIS 🤩🤟
+        shell: cmd
+        run: |
+          xcopy /s /y .\out\* C:\www
 
