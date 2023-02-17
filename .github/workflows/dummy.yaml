@@ -30,7 +30,8 @@ jobs:
         run: dotnet build -c Release --no-restore
       
       - name: Publish App 📑
-        run: dotnet publish -c Release -o ./out
+        shell: cmd
+        run: dotnet publish -c Release -o .\out
       
       - name: Deploy to IIS 🤩🤟
         shell: cmd
