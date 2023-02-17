@@ -33,5 +33,5 @@ jobs:
         run: dotnet publish -c Release -o ./out
       
       - name: Deploy to IIS 🤩🤟
-        run: cp -r ./out c:/www
+        run: cp -r ./out 'c:/www'
 
