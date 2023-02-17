@@ -14,9 +14,6 @@ env:
   DOTNET_VERSION: '6.0.x'
   AZURE_WEB_APP_NAME: rainers-first-webapp
 
-defaults:
-  run:
-    working-directory: ./API
 jobs:
   build_test_deploy:
     runs-on:
