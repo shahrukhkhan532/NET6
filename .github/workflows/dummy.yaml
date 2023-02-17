@@ -37,6 +37,7 @@ jobs:
         run: iisreset /stop
       
       - name: Deploy to IIS 🤩🤟
+        shell: bash
         run: cp -r ./out 'c:/www'
 
       - name: Start IIS Server ✔🤝
