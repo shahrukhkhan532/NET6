@@ -32,14 +32,13 @@ jobs:
       - name: Publish App 📑
         run: dotnet publish -c Release -o ./out
       
+      - name: Deploy to IIS 🤩🤟
+        run: cp -r ./out 'c:/www'
+
       - name: Stop IIS Server ✋🛑
         shell: cmd
         run: iisreset /stop
       
-      - name: Deploy to IIS 🤩🤟
-        shell: sh
-        run: cp -r ./out 'c:/www'
-
       - name: Start IIS Server ✔🤝
         shell: cmd
         run: iisreset /start
