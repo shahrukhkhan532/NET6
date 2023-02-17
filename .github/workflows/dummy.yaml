@@ -35,5 +35,5 @@ jobs:
       - name: Deploy to IIS 🤩🤟
         shell: cmd
         run: |
-          xcopy /s /y .\out\* C:\www
+          xcopy /s /y .\out\* c:\www
 
