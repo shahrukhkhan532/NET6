@@ -24,7 +24,7 @@ jobs:
       - name: Notify Development Team 🔔
         shell: cmd
         run: |
-          curl -X POST ${{ env.TEAM_URL }}
+          curl POST ${{ env.TEAM_URL }}
             -H "Content-Type: application/json"
             -d '{ "title":"test", "text":"Deployment done by Dev" }'
 
