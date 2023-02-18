@@ -23,12 +23,6 @@ jobs:
     steps:
       # - name: Notify Development Team 🔔
         # run: curl -body '{ "title":"test", "text":"Deployment done by Dev" }' ${{ env.TEAM_URL }} -Method 'POST'
-      - name: Remove PSReadLine
-        shell: PowerShell
-        run: Remove-Module -Name PSReadline
-
-      - name: Check Out Code 🚓
-        uses: actions/checkout@v3
 
       - name: Restore Dependencies ⌚
         run: dotnet restore /clp:ErrorsOnly
@@ -54,7 +48,3 @@ jobs:
         shell: cmd
         run: |
           %windir%\system32\inetsrv\appcmd start apppool gh-actions-iis-demo.com
-      
-      - name: Add PSReadLine
-        shell: PowerShell
-        run: Import-Module -Name PSReadline
