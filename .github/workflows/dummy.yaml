@@ -30,7 +30,9 @@ jobs:
         run: dotnet build -c Release --no-restore
       
       - name: Publish App 📑
-        run: dotnet publish -c Release -o ./out
+        run: |
+          echo ${{github.actor}}
+          dotnet publish -c Release -o ./out
       
       - name: Stop IIS Server ✋🛑
         shell: cmd
