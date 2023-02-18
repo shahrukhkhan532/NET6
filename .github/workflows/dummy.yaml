@@ -11,8 +11,9 @@ on:
       - dummyBranch
 
 env:
-  DOTNET_VERSION: '6.0.x'
+  DOTNET_VERSION: "6.0.x"
   AZURE_WEB_APP_NAME: rainers-first-webapp
+  TEAM_URL: "https://icaremanagerllc.webhook.office.com/webhookb2/1c9fa85a-a9db-4824-a749-51e475101ae5@89e9d208-fb4a-4579-a02e-ae453b60c3a6/IncomingWebhook/2518c48279da4630b2ad749568c4bf31/22a4babb-2d32-4af5-bb41-4df9d477e8a8"
 
 jobs:
   build_test_deploy:
@@ -28,24 +29,26 @@ jobs:
 
       - name: Build App 🚀
         run: dotnet build -c Release --no-restore
-      
+
       - name: Publish App 📑
         run: |
-          echo ${{github.actor}}
-          user=${{github.actor}}
-          echo "$user SRK"
+          echo ${{ github.actor }}
           dotnet publish -c Release -o ./out
-      
-      - name: Stop IIS Server ✋🛑
+
+      - name: Stop IIS Server 🛑
         shell: cmd
         run: iisreset /stop
-      
+
       - name: Deploy to IIS 🤩🤟
         shell: PowerShell
         run: Copy-Item ".\out\*" -Destination "c:\www\gh-actions-iis-demo.com" -Recurse
-        # run: cp -r ./out/* 'c:/www/gh-actions-iis-demo.com'
-
-      - name: Start IIS Server ✔🤝
+        
+      - name: Start IIS Server ✔
         shell: cmd
         run: iisreset /start
 
+      - name: Notify Development Team 🔔
+        run: |
+          curl -X POST ${{ env.TEAM_URL }}
+            -H "Content-Type: application/json"
+            -d '{ "title":"test", "text":"Deployment done by Dev" }'
