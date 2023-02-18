@@ -37,7 +37,7 @@ jobs:
         run: iisreset /stop
       
       - name: Deploy to IIS 🤩🤟
-        run: cp -r ./out/* 'c:/www'
+        run: cp -r ./out/* 'c:/www/gh-actions-iis-demo.com'
 
       - name: Start IIS Server ✔🤝
         shell: cmd
