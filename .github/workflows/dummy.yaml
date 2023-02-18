@@ -23,6 +23,8 @@ jobs:
     steps:
       # - name: Notify Development Team 🔔
         # run: curl -body '{ "title":"test", "text":"Deployment done by Dev" }' ${{ env.TEAM_URL }} -Method 'POST'
+      - name: Check Out Code 🚓
+        uses: actions/checkout@v3
 
       - name: Restore Dependencies ⌚
         run: dotnet restore /clp:ErrorsOnly
