@@ -22,11 +22,8 @@ jobs:
       - label-test
     steps:
       - name: Notify Development Team 🔔
-        run: |
-          curl POST ${{ env.TEAM_URL }}
-            -H "Content-Type: application/json"
-            -d '{ "title":"test", "text":"Deployment done by Dev" }'
-
+        run: curl --json '{ "title":"test", "text":"Deployment done by Dev" }' ${{ env.TEAM_URL }}
+        
       - name: Check Out Code 🚓
         uses: actions/checkout@v3
 
