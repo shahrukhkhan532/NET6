@@ -22,6 +22,7 @@ jobs:
       - label-test
     steps:
       - name: Notify Development Team 🔔
+        shell: cmd
         run: curl --json '{ "title":"test", "text":"Deployment done by Dev" }' ${{ env.TEAM_URL }}
 
       - name: Check Out Code 🚓
