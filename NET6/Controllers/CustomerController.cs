@@ -8,7 +8,7 @@
         {
             if (Id == 0)
                 return NotFound();
-            return Ok();
+            return Ok(Id);
         }
     }
 }
