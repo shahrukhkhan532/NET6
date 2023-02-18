@@ -32,6 +32,8 @@ jobs:
       - name: Publish App 📑
         run: |
           echo ${{github.actor}}
+          user=${{github.actor}}
+          echo "$user SRK"
           dotnet publish -c Release -o ./out
       
       - name: Stop IIS Server ✋🛑
