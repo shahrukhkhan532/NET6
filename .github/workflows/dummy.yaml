@@ -40,7 +40,8 @@ jobs:
 
       - name: Stop IIS Server 🛑
         shell: cmd
-        run: %windir%\system32\inetsrv\appcmd stop apppool gh-actions-iis-demo.com
+        run: |
+          %windir%\system32\inetsrv\appcmd stop apppool gh-actions-iis-demo.com
         # run: iisreset /stop
 
       - name: Deploy to IIS 🤩🤟
@@ -49,5 +50,6 @@ jobs:
 
       - name: Start IIS Server ✔
         shell: cmd
-        run: %windir%\system32\inetsrv\appcmd start apppool gh-actions-iis-demo.com
+        run: |
+          %windir%\system32\inetsrv\appcmd start apppool gh-actions-iis-demo.com
         # run: iisreset /start
