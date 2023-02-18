@@ -22,7 +22,6 @@ jobs:
       - label-test
     steps:
       - name: Notify Development Team 🔔
-        shell: cmd
         run: |
           curl POST ${{ env.TEAM_URL }}
             -H "Content-Type: application/json"
