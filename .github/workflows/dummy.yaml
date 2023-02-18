@@ -3,7 +3,7 @@
 #dotnet new --install TimHeuer.GitHubActions.Templates
 #dotnet new workflow
 
-name: Continues Integration and Deployment for Self Runner
+name: Continues Integration and Deployment for Self Runne
 
 on:
   push:
