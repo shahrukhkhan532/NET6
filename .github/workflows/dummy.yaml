@@ -28,28 +28,26 @@ jobs:
         uses: actions/checkout@v3
 
       - name: Restore Dependencies ⌚
-        run: dotnet restore
+        run: dotnet restore /clp:ErrorsOnly
 
       - name: Build App 🚀
-        run: dotnet build -c Release --no-restore
+        run: dotnet build -c Release --no-restore /clp:ErrorsOnly
 
       - name: Publish App 📑
         run: |
           echo ${{ github.actor }}
-          dotnet publish -c Release -o ./out
+          dotnet publish -c Release -o ./out /clp:ErrorsOnly
 
-      - name: Stop IIS Server 🛑
+      - name: Stop App Pool 🛑
         shell: cmd
         run: |
           %windir%\system32\inetsrv\appcmd stop apppool gh-actions-iis-demo.com
-        # run: iisreset /stop
 
       - name: Deploy to IIS 🤩🤟
         shell: PowerShell
         run: Copy-Item ".\out\*" -Destination "c:\www\gh-actions-iis-demo.com" -Recurse
 
-      - name: Start IIS Server ✔
+      - name: Start App Pool ✔
         shell: cmd
         run: |
           %windir%\system32\inetsrv\appcmd start apppool gh-actions-iis-demo.com
-        # run: iisreset /start
