@@ -3,7 +3,7 @@
 #dotnet new --install TimHeuer.GitHubActions.Templates
 #dotnet new workflow
 
-name: Continues Integration and Deployment for Self Runner
+name: Continues Integration and Deployment for Self Runner1
 
 on:
   push:
@@ -23,7 +23,7 @@ jobs:
     steps:
       - name: Notify Development Team 🔔
         run: curl --json '{ "title":"test", "text":"Deployment done by Dev" }' ${{ env.TEAM_URL }}
-        
+
       - name: Check Out Code 🚓
         uses: actions/checkout@v3
 
