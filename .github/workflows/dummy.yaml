@@ -38,11 +38,9 @@ jobs:
           echo ${{ github.actor }}
           dotnet publish -c Release -o ./out /clp:ErrorsOnly
 
-      - name: Deploy to IIS 🤩🤟
-        shell: PowerShell
-        run: Copy-Item ".\out\*" -Destination "c:\www\gh-actions-iis-demo.com" -Recurse
-
-      - name: Recycle App Pool ✔
+      - name: Deploy to IIS ✔
         shell: cmd
         run: |
-          %windir%\system32\inetsrv\appcmd recycle apppool gh-actions-iis-demo.com
+          %windir%\system32\inetsrv\appcmd stop apppool gh-actions-iis-demo.com
+          xcopy .\out\* "c:\www\gh-actions-iis-demo.com" /i /s /y
+          %windir%\system32\inetsrv\appcmd start apppool gh-actions-iis-demo.com
