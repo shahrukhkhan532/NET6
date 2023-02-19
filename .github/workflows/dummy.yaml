@@ -38,9 +38,9 @@ jobs:
           echo ${{ github.actor }}
           dotnet publish -c Release -o ./out /clp:ErrorsOnly
 
-      - name: Deploy to IIS ✔
+      - name: Deploy to QA Server ✔
         shell: cmd
         run: |
           %windir%\system32\inetsrv\appcmd stop apppool gh-actions-iis-demo.com
-          xcopy .\out\* "c:\www\gh-actions-iis-demo.com" /i /s /y
+          xcopy .\out\* "c:\www\gh-actions-iis-demo.com" /i /s /y /Q
           %windir%\system32\inetsrv\appcmd start apppool gh-actions-iis-demo.com
