@@ -21,32 +21,28 @@ jobs:
       - self-hosted
       - label-test
     steps:
-      # - name: Notify Development Team 🔔
-        # run: curl -body '{ "title":"test", "text":"Deployment done by Dev" }' ${{ env.TEAM_URL }} -Method 'POST'
       - name: Check Out Code 🚓
         uses: actions/checkout@v3
 
       - name: Restore Dependencies ⌚
+        shell: cmd
         run: dotnet restore /clp:ErrorsOnly
 
       - name: Build App 🚀
+        shell: cmd
         run: dotnet build -c Release --no-restore /clp:ErrorsOnly
 
       - name: Publish App 📑
+        shell: cmd
         run: |
           echo ${{ github.actor }}
           dotnet publish -c Release -o ./out /clp:ErrorsOnly
-
-      - name: Stop App Pool 🛑
-        shell: cmd
-        run: |
-          %windir%\system32\inetsrv\appcmd stop apppool gh-actions-iis-demo.com
 
       - name: Deploy to IIS 🤩🤟
         shell: PowerShell
         run: Copy-Item ".\out\*" -Destination "c:\www\gh-actions-iis-demo.com" -Recurse
 
-      - name: Start App Pool ✔
+      - name: Recycle App Pool ✔
         shell: cmd
         run: |
-          %windir%\system32\inetsrv\appcmd start apppool gh-actions-iis-demo.com
+          %windir%\system32\inetsrv\appcmd recycle apppool gh-actions-iis-demo.com
