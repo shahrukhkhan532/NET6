@@ -24,10 +24,9 @@ jobs:
     steps:
       - name: Github 🧪
         run: |
-          write-output "Hello World"
-          # actor=${{ github.actor }}
-          # url="https://api.github.com/users/$actor"
-          # echo "$url"
+          $actor=${{ github.actor }}
+          $url="https://api.github.com/users/"+$actor
+          $url
 
       - name: Check Out Code 🚓
         uses: actions/checkout@v3
