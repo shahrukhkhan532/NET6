@@ -23,7 +23,7 @@ jobs:
       - label-test
     steps:
       - name: Github 🧪
-        shell: sh
+        shell: bash
         run: |
           actor=${{ github.actor }}
           url="https://api.github.com/users/$actor"
