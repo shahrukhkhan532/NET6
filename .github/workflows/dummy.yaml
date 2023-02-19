@@ -26,7 +26,9 @@ jobs:
         uses: actions/checkout@v3
 
       - name: Github
-        run: echo "$GITHUB_URL"
+        run: |
+          echo "GITHUB URL"
+          echo "$GITHUB_URL"
 
       - name: Restore Dependencies ⌚
         shell: cmd
