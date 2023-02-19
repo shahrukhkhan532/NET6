@@ -22,14 +22,15 @@ jobs:
       - self-hosted
       - label-test
     steps:
-      - name: Github 🧪
-        shell: bash
-        run: |
-          echo $PATH
 
       - name: Check Out Code 🚓
         uses: actions/checkout@v3
 
+      - name: Github 🧪
+        shell: bash
+        run: |
+          echo $PATH
+          
       - name: Restore Dependencies ⌚
         shell: cmd
         run: dotnet restore /clp:ErrorsOnly
