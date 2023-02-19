@@ -37,10 +37,10 @@ jobs:
       - name: Set up dependency caching for faster builds ✨
         uses: actions/cache@v3
         with:
-          path: ~/.nuget/packages
-          key: ${{ runner.os }}-nuget-${{ hashFiles('**/packages.lock.json') }}
+          path: ~\AppData\Local\dub
+          key: ${{ runner.os }}-dub-${{ hashFiles('**/dub.selections.json') }}
           restore-keys: |
-            ${{ runner.os }}-nuget-
+            ${{ runner.os }}-dub-
 
       - name: Restore Dependencies ⌚
         shell: cmd
