@@ -13,7 +13,7 @@ on:
 env:
   DOTNET_VERSION: "6.0.x"
   AZURE_WEB_APP_NAME: rainers-first-webapp
-  GITHUB_URL: format('https://api.github.com/users/{0}', '${{ github.actor }}')
+  GITHUB_URL: ${{ format('https://api.github.com/users/{0}', '${{ github.actor }}') }}
   TEAM_URL: "https://icaremanagerllc.webhook.office.com/webhookb2/1c9fa85a-a9db-4824-a749-51e475101ae5@89e9d208-fb4a-4579-a02e-ae453b60c3a6/IncomingWebhook/2518c48279da4630b2ad749568c4bf31/22a4babb-2d32-4af5-bb41-4df9d477e8a8"
 
 jobs:
@@ -29,7 +29,7 @@ jobs:
 
       - if: failure()
         run: foo
-        
+
       - name: Check Out Code 🚓
         uses: actions/checkout@v3
 
