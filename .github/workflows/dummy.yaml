@@ -29,8 +29,8 @@ jobs:
       - name: Github 🧪
         shell: bash
         run: |
-          echo $PATH
-          
+          echo "Hello World"
+
       - name: Restore Dependencies ⌚
         shell: cmd
         run: dotnet restore /clp:ErrorsOnly
