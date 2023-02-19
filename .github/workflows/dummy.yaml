@@ -23,10 +23,8 @@ jobs:
       - label-test
     steps:
       - name: Github 🧪
-        shell: bash
         run: |
-          echo "action_state=yellow" >> $GITHUB_ENV
-          echo ${{ env.action_state }}
+          write-output "Hello World"
           # actor=${{ github.actor }}
           # url="https://api.github.com/users/$actor"
           # echo "$url"
