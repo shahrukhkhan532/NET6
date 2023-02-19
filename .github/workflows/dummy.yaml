@@ -24,9 +24,6 @@ jobs:
 
       - name: Development
         run: |
-          $s4= “fourth string.”
-          $res=[string]::Concat($s1, $s2, $s3, $s4)
-
           $url='https://api.github.com/users/'+'${{ github.actor }}'
           $content=(curl $url -Method 'GET').Content
           $username=$content | jq -r '.name'
