@@ -44,9 +44,7 @@ jobs:
 
       - name: Publish App 📑
         shell: cmd
-        run: |
-          echo ${{ github.actor }}
-          dotnet publish -c Release -o ./out /clp:ErrorsOnly
+        run: dotnet publish -c Release -o ./out /clp:ErrorsOnly
 
       - name: Deploy to QA Server ✔
         shell: cmd
