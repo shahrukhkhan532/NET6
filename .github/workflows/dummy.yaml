@@ -27,9 +27,8 @@ jobs:
           $url='https://api.github.com/users/'+'${{ github.actor }}'
           $content=(curl $url -Method 'GET').Content
           $username=$content | jq -r '.name'
-          Write-Output $username
-          $ll="Deployment done by"+$username
-          $bb="{ 'title':'Test', 'text':$ll }"
+          $ll="Deployment done by "+$username
+          $bb="{ 'title':'Test', 'text':'$ll' }"
           Write-Output $bb
 
       - name: Check Out Code 🚓
