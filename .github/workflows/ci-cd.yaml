@@ -45,11 +45,8 @@ jobs:
       #   with:
       #     time: '5s'
 
-      - name: Restore Dependencies ⌚
-        run: dotnet restore
-
       - name: Build App 🚀
-        run: dotnet build -c Release --no-restore
+        run: dotnet build -c Release
       
       - name: Run automated tests 🧪
         env:
