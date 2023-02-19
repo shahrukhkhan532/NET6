@@ -40,7 +40,7 @@ jobs:
           path: ~/.nuget/packages
           key: ${{ runner.os }}-nuget-${{ hashFiles('**/packages.lock.json') }}
           restore-keys: |
-            ${{ runner.os }}-nuget-
+            ${{ runner.os }}-nuget-${{ hashFiles('**/packages.lock.json') }}
 
       - name: Restore Dependencies ⌚
         shell: cmd
