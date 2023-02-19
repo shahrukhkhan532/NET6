@@ -22,13 +22,16 @@ jobs:
       - self-hosted
       - label-test
     steps:
-      - name: Check Out Code 🚓
-        uses: actions/checkout@v3
-
       - name: Github
         run: |
           echo "GITHUB URL"
           echo ${{ env.GITHUB_URL }}
+
+      - if: failure()
+        run: foo
+        
+      - name: Check Out Code 🚓
+        uses: actions/checkout@v3
 
       - name: Restore Dependencies ⌚
         shell: cmd
