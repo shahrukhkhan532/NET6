@@ -3,12 +3,12 @@
 #dotnet new --install TimHeuer.GitHubActions.Templates
 #dotnet new workflow
 
-name: Continues Integration and Deployment for Self Runne
+name: Continues Integration and Deployment for Self Runner
 
 on:
   push:
     branches:
-      - dummyBranch
+      - master
 
 env:
   DOTNET_VERSION: "6.0.x"
@@ -22,17 +22,25 @@ jobs:
       - label-test
     steps:
 
-      - name: Development
-        run: |
-          $url='https://api.github.com/users/'+'${{ github.actor }}'
-          $content=(curl $url -Method 'GET').Content
-          $username=$content | jq -r '.name'
-          $message="Deployment done by "+$username
-          $json="{ 'title':'Test', 'text':'$message' }"
-          curl -body $json ${{ env.TEAM_URL }} -Method 'POST'
+      # - name: Development
+      #   run: |
+      #     $url='https://api.github.com/users/'+'${{ github.actor }}'
+      #     $content=(curl $url -Method 'GET').Content
+      #     $username=$content | jq -r '.name'
+      #     $message="Deployment done by "+$username
+      #     $json="{ 'title':'Test', 'text':'$message' }"
+      #     curl -body $json ${{ env.TEAM_URL }} -Method 'POST'
 
       - name: Check Out Code 🚓
         uses: actions/checkout@v3
+      
+      - name: Set up dependency caching for faster builds ✨
+        uses: actions/cache@v2
+        with:
+          path: ~/.nuget/packages
+          key: ${{ runner.os }}-nuget-${{ hashFiles('**/packages.lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-nuget-
 
       - name: Restore Dependencies ⌚
         shell: cmd

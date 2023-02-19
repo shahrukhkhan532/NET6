@@ -8,7 +8,7 @@ name: Continues Integration and Deployment
 on:
   push:
     branches:
-      - master
+      - dummy
 
 env:
   DOTNET_VERSION: '6.0.x'
