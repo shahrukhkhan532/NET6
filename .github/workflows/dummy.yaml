@@ -28,7 +28,7 @@ jobs:
       - name: Github
         run: |
           echo "GITHUB URL"
-          echo "$GITHUB_URL"
+          echo ${{ env.GITHUB_URL }}
 
       - name: Restore Dependencies ⌚
         shell: cmd
