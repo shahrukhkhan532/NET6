@@ -23,10 +23,9 @@ jobs:
       - label-test
     steps:
       - name: Github 🧪
+        shell: bash
         run: |
-          $actor=${{ github.actor }}
-          $url="https://api.github.com/users/"+$actor
-          $url
+          echo $PATH
 
       - name: Check Out Code 🚓
         uses: actions/checkout@v3
