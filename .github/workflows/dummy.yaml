@@ -28,7 +28,8 @@ jobs:
           $content=(curl $url -Method 'GET').Content
           $username=$content | jq -r '.name'
           Write-Output $username
-          $bb="{ 'title':'Test', 'text':'Deployment done by '+$username }"
+          $ll="Deployment done by"+$username
+          $bb="{ 'title':'Test', 'text':$ll }"
           Write-Output $bb
 
       - name: Check Out Code 🚓
