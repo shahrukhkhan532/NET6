@@ -23,11 +23,8 @@ jobs:
     steps:
 
       - name: Development
-        shell: bash
         run: |
-          URL="https://api.github.com/users/shahrukhkhan532"
-          name=$(curl -X GET $URL | jq -r '.name')
-          echo $name
+          curl 'https://api.github.com/users/shahrukhkhan532' -Method 'GET'
 
 
       - name: Check Out Code 🚓
