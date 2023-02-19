@@ -24,10 +24,10 @@ jobs:
 
       - name: Development
         run: |
-          $content=(curl 'https://api.github.com/users/shahrukhkhan532' -Method 'GET').Content
+          $url='https://api.github.com/users/'+'${{ github.actor }}'
+          $content=(curl $url -Method 'GET').Content
           $username=$content | jq -r '.name'
           Write-Output $username
-
 
       - name: Check Out Code 🚓
         uses: actions/checkout@v3
