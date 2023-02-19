@@ -29,12 +29,12 @@ jobs:
         with:
           dotnet-version: ${{ env.DOTNET_VERSION }}
       
-      - uses: actions/cache@v3
-        with:
-          path: ~/.nuget/packages
-          key: ${{ runner.os }}-nuget-${{ hashFiles('**/*.csproj*') }}
-          restore-keys: |
-            ${{ runner.os }}-nuget
+      # - uses: actions/cache@v3
+      #   with:
+      #     path: ~/.nuget/packages
+      #     key: ${{ runner.os }}-nuget-${{ hashFiles('**/*.csproj*') }}
+      #     restore-keys: |
+      #       ${{ runner.os }}-nuget
 
       # - name: Start SQL Server
       #   run: |
