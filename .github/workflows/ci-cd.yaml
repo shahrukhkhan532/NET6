@@ -8,7 +8,7 @@ name: Continues Integration and Deployment
 on:
   push:
     branches:
-      - dummy
+      - master
 
 env:
   DOTNET_VERSION: '6.0.x'
@@ -29,6 +29,13 @@ jobs:
         with:
           dotnet-version: ${{ env.DOTNET_VERSION }}
       
+      - uses: actions/cache@v3
+        with:
+          path: ~/.nuget/packages
+          key: ${{ runner.os }}-nuget-${{ hashFiles('**/*.csproj*') }}
+          restore-keys: |
+            ${{ runner.os }}-nuget
+
       # - name: Start SQL Server
       #   run: |
       #     docker run -d -e "ACCEPT_EULA=Y" -e "SA_PASSWORD=Passw0r8" -e "MSSQL_PID=Express" -p 1433:1433 -d mcr.microsoft.com/mssql/server:latest

@@ -8,7 +8,7 @@ name: Continues Integration and Deployment for Self Runner
 on:
   push:
     branches:
-      - master
+      - dummy
 
 env:
   DOTNET_VERSION: "6.0.x"
