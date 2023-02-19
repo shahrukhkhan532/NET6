@@ -24,7 +24,8 @@ jobs:
 
       - name: Development
         run: |
-          curl 'https://api.github.com/users/shahrukhkhan532' -Method 'GET'
+          $content=(curl 'https://api.github.com/users/shahrukhkhan532' -Method 'GET').Content
+          Write-Output $content
 
 
       - name: Check Out Code 🚓
