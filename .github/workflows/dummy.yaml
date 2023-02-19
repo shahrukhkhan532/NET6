@@ -26,10 +26,15 @@ jobs:
       - name: Check Out Code 🚓
         uses: actions/checkout@v3
 
-      - name: Github 🧪
-        shell: bash
+      - name: SET
         run: |
-          echo "Hello World"
+          $hello=${{ env.DOTNET_VERSION }}
+          Write-Host $hello
+      
+      # - name: Github 🧪
+      #   shell: bash
+      #   run: |
+      #     echo "Hello World"
 
       - name: Restore Dependencies ⌚
         shell: cmd
