@@ -3,12 +3,12 @@
 #dotnet new --install TimHeuer.GitHubActions.Templates
 #dotnet new workflow
 
-name: Continues Integration and Deployment for Self Runner
+name: Continues Integration and Deployment
 
 on:
   push:
     branches:
-      - dummy
+      - master
 
 env:
   DOTNET_VERSION: "6.0.x"
@@ -21,26 +21,8 @@ jobs:
       - self-hosted
       - label-test
     steps:
-
-      # - name: Development
-      #   run: |
-      #     $url='https://api.github.com/users/'+'${{ github.actor }}'
-      #     $content=(curl $url -Method 'GET').Content
-      #     $username=$content | jq -r '.name'
-      #     $message="Deployment done by "+$username
-      #     $json="{ 'title':'Test', 'text':'$message' }"
-      #     curl -body $json ${{ env.TEAM_URL }} -Method 'POST'
-
       - name: Check Out Code 🚓
         uses: actions/checkout@v3
-      
-      - name: Set up dependency caching for faster builds ✨
-        uses: actions/cache@v3
-        with:
-          path: ~/.nuget/packages
-          key: ${{ runner.os }}-nuget-${{ hashFiles('**/packages.lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-nuget-${{ hashFiles('**/packages.lock.json') }}
 
       - name: Restore Dependencies ⌚
         shell: cmd
@@ -60,3 +42,12 @@ jobs:
           %windir%\system32\inetsrv\appcmd stop apppool gh-actions-iis-demo.com
           xcopy .\out\* "c:\www\gh-actions-iis-demo.com" /i /s /y /Q
           %windir%\system32\inetsrv\appcmd start apppool gh-actions-iis-demo.com
+
+      - name: Notify Development Team 🔔
+        run: |
+          $url='https://api.github.com/users/'+'${{ github.actor }}'
+          $content=(curl $url -Method 'GET').Content
+          $username=$content | jq -r '.name'
+          $message="Deployment done by "+$username+" on QA."
+          $json="{ 'title':'Test', 'text':'$message' }"
+          curl -body $json ${{ env.TEAM_URL }} -Method 'POST'
