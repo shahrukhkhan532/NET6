@@ -43,11 +43,11 @@ jobs:
           xcopy .\out\* "c:\www\gh-actions-iis-demo.com" /i /s /y /Q
           %windir%\system32\inetsrv\appcmd start apppool gh-actions-iis-demo.com
 
-      - name: Notify Development Team 🔔
-        run: |
-          $url='https://api.github.com/users/'+'${{ github.actor }}'
-          $content=(curl $url -Method 'GET').Content
-          $username=$content | jq -r '.name'
-          $message="Deployment done by "+$username+" on QA."
-          $json="{ 'title':'Test', 'text':'$message' }"
-          curl -body $json ${{ env.TEAM_URL }} -Method 'POST'
+      # - name: Notify Development Team 🔔
+      #   run: |
+      #     $url='https://api.github.com/users/'+'${{ github.actor }}'
+      #     $content=(curl $url -Method 'GET').Content
+      #     $username=$content | jq -r '.name'
+      #     $message="Deployment done by "+$username+" on QA."
+      #     $json="{ 'title':'Test', 'text':'$message' }"
+      #     curl -body $json ${{ env.TEAM_URL }} -Method 'POST'
