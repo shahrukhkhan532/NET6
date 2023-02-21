@@ -38,41 +38,46 @@ jobs:
           $OutputSQLFilePath = $path + "\SQL.log"
 
           $files = Get-ChildItem -Path $scriptPath -Recurse -Include *.sql
-          foreach ($file in $files) {
+          $message = ""
+          foreach ($file in $files) 
+          {
               Invoke-Sqlcmd -ServerInstance $instance -Database $DbName -Username $UID -Password $Password -InputFile $file -Verbose *>> $OutputSQLFilePath
               if(!($?))
               {
-                $errors = $files.Name + " File Contains Errors`n"
+                $errors = "❌ " + $files.Name + " File Contains Errors`n"
                 $errors += Get-Content $OutputSQLFilePath | Out-String
-                Write-Output $errors | Out-File -FilePath $OutputSQLFilePath
-                
-                # Notify Development Team
-                $github_URL = "https://api.github.com/users/" + "${{ github.actor }}"
-                $User = Invoke-RestMethod -Method Get -Uri $github_URL
-                $username = ""
-                if([string]::IsNullOrEmpty($User.name)){
-                    $username = $User.login
-                }else{
-                    $username = $User.name
-                }
-                $title = $username + " Did Mistake."
-                $param = @{
-                    Uri = "https://jsonplaceholder.typicode.com/posts"
-                    Method = "POST"
-                    Body = @{
-                        id = 1
-                        title = $title
-                        body = $errors
-                    } | ConvertTo-Json
-                    ContentType = 'application/json'
-                }
-                Invoke-RestMethod @param
+                $message += $errors + "`n"
+                Write-Output $errors | Out-File -FilePath $OutputSQLFilePath 
               }
               else
               {
-                Remove-Item $OutputSQLFilePath -Recurse
+                $message += "✔ " + $files.Name + " Successfully Executed.`n"
+                #Remove-Item $OutputSQLFilePath -Recurse
               }
           }
+          # Notify Development Team
+          $github_URL = "https://api.github.com/users/" + "${{ github.actor }}"
+          $User = Invoke-RestMethod -Method Get -Uri $github_URL
+          $username = ""
+          if([string]::IsNullOrEmpty($User.name)){
+              $username = $User.login
+          }else{
+              $username = $User.name
+          }
+          $title = "⚠ " + $username + " Did Mistake."
+          $param = @{
+              Uri = "https://jsonplaceholder.typicode.com/posts"
+              Method = "POST"
+              Body = @{
+                  id = 1
+                  title = $title
+                  body = $message
+              } | ConvertTo-Json
+              ContentType = 'application/json'
+          }
+          Invoke-RestMethod @param
+          $message > ($path + "\LOGS.log")
+
       
       - name: Restore Dependencies 📩
         shell: cmd
