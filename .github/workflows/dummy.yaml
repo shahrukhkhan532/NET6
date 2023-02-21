@@ -20,6 +20,7 @@ jobs:
     runs-on:
       - self-hosted
       - label-test
+    environment: qa
     steps:
       - name: Check Out Code 🚓
         uses: actions/checkout@v3
@@ -31,10 +32,10 @@ jobs:
           $scriptPath = $path + "\DB Script"
           Write-Output $scriptPath
 
-          $instance = "192.168.7.176\QA"
-          $DbName = "ICM_QA"
-          $UID = "aramzan"
-          $Password = "Temp123$"
+          $instance = "${{ secrets.INSTANCE }}"
+          $DbName = "${{ secrets.DBNAME }}"
+          $UID = "${{ secrets.UID }}"
+          $Password = "${{ secrets.PASSWORD }}"
           $OutputSQLFilePath = $path + "\SQL.log"
 
           $files = Get-ChildItem -Path $scriptPath -Recurse -Include *.sql
