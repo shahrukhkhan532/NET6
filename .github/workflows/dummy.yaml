@@ -42,17 +42,10 @@ jobs:
           foreach ($file in $files) 
           {
               Invoke-Sqlcmd -ServerInstance $instance -Database $DbName -Username $UID -Password $Password -InputFile $file -Verbose *>> $OutputSQLFilePath
-              if(!($?))
-              {
-                $message += $file.Name + " File Contains Errors.`n"
-                #$message += (Get-Content $OutputSQLFilePath | Out-String)
-                #$message += $message + "`n"
-                #Write-Output $errors | Out-File -FilePath $OutputSQLFilePath 
-              }
-              else
-              {
+              if(!($?)){
+                $message += $file.Name + " File Contains Errors. Please see logs file in root directory.`n"
+              }else{
                 $message += $file.Name + " Successfully Executed.`n"
-                #Remove-Item $OutputSQLFilePath -Recurse
               }
           }
           # Notify Development Team
