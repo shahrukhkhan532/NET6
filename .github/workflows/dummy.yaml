@@ -1,0 +1,108 @@
+# For auto generating this yaml file for .NET project run these command sequencely
+#dotnet new workflow --search
+#dotnet new --install TimHeuer.GitHubActions.Templates
+#dotnet new workflow
+
+name: Continues Integration and Deployment
+
+on:
+  push:
+    branches:
+      - master
+
+env:
+  DOTNET_VERSION: "6.0.x"
+  AZURE_WEB_APP_NAME: rainers-first-webapp
+  TEAM_URL: "https://icaremanagerllc.webhook.office.com/webhookb2/1c9fa85a-a9db-4824-a749-51e475101ae5@89e9d208-fb4a-4579-a02e-ae453b60c3a6/IncomingWebhook/2518c48279da4630b2ad749568c4bf31/22a4babb-2d32-4af5-bb41-4df9d477e8a8"
+
+concurrency:
+  group: environment-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build_test_deploy:
+    runs-on:
+      - self-hosted
+      - label-test
+    environment: qa
+    steps:
+      - name: Check Out Code 🚓
+        uses: actions/checkout@v3
+
+      - name: Run SQL Scripts 📜
+        shell: PowerShell
+        run: |
+          $branch = "${{ github.ref_name }}"
+          Write-Output ("THIS IS BRANCH" + $branch)
+          $path = $ExecutionContext.SessionState.Path.GetUnresolvedProviderPathFromPSPath('.\')
+          $scriptPath = $path + "\DB Script"
+          Write-Output $scriptPath
+
+          $instance = "${{ secrets.INSTANCE }}"
+          $DbName = "${{ secrets.DBNAME }}"
+          $UID = "${{ secrets.UID }}"
+          $Password = "${{ secrets.PASSWORD }}"
+          $OutputSQLFilePath = $path + "\SQL.log"
+
+          $files = Get-ChildItem -Path $scriptPath -Recurse -Include *.sql
+          $message = ""
+          foreach ($file in $files) 
+          {
+              Invoke-Sqlcmd -ServerInstance $instance -Database $DbName -Username $UID -Password $Password -InputFile $file -Verbose *>> $OutputSQLFilePath
+              if(!($?)){
+                $message += $file.Name + " File Contains Errors. Please see logs file in root directory.`n"
+              }else{
+                $message += $file.Name + " Successfully Executed.`n"
+              }
+          }
+          # Notify Development Team
+          $github_URL = "https://api.github.com/users/" + "${{ github.actor }}"
+          $User = Invoke-RestMethod -Method Get -Uri $github_URL
+          $username = ""
+          if([string]::IsNullOrEmpty($User.name)){
+              $username = $User.login
+          }else{
+              $username = $User.name
+          }
+          $title = "⚠ " + $username + " Did Mistake."
+          $param = @{
+              Uri = "https://jsonplaceholder.typicode.com/posts"
+              Method = "POST"
+              Body = @{
+                  id = 1
+                  title = $title
+                  body = $message
+              } | ConvertTo-Json
+              ContentType = 'application/json'
+          }
+          Invoke-RestMethod @param
+          $message > ($path + "\LOGS.log")
+
+      
+      - name: Restore Dependencies 📩
+        shell: cmd
+        run: dotnet restore /clp:ErrorsOnly
+
+      - name: Build App 🔳
+        shell: cmd
+        run: dotnet build -c Release --no-restore /clp:ErrorsOnly
+
+      - name: Publish App 🚀
+        shell: cmd
+        run: dotnet publish -c Release -o ./out /clp:ErrorsOnly
+
+      - name: Deploy to QA Server ✔
+        shell: cmd
+        run: |
+          %windir%\system32\inetsrv\appcmd stop apppool gh-actions-iis-demo.com
+          xcopy .\out\* "c:\www\gh-actions-iis-demo.com" /i /s /y /Q
+          %windir%\system32\inetsrv\appcmd start apppool gh-actions-iis-demo.com
+
+      # - name: Notify Development Team 🔔
+      #   run: |
+      #     $url='https://api.github.com/users/'+'${{ github.actor }}'
+      #     $content=(curl $url -Method 'GET').Content
+      #     $username=$content | jq -r '.name'
+      #     $message="Deployment done by "+$username+" on QA."
+      #     $json="{ 'title':'Test', 'text':'$message' }"
+      #     curl -body $json ${{ env.TEAM_URL }} -Method 'POST'

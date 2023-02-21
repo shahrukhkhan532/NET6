@@ -3,29 +3,39 @@
 #dotnet new --install TimHeuer.GitHubActions.Templates
 #dotnet new workflow
 
-name: Continues Integration and Deployment (SRK)
+name: Continues Integration and Deployment
 
 on:
   push:
     branches:
-      - master
+      - dummyBranch
 
 env:
   DOTNET_VERSION: '6.0.x'
   AZURE_WEB_APP_NAME: rainers-first-webapp
 
 jobs:
-  build:
+  build_test_deploy:
     runs-on: ubuntu-latest
     steps:
       - name: Check Out Code 🚓
         uses: actions/checkout@v3
+      - name: Testing Api
+        run:  |
+          curl "https://jsonplaceholder.typicode.com/users"
       
       - name: Setup .NET 6 🛠
-        uses: actions/setup-dotnet@v2
+        uses: actions/setup-dotnet@v3
         with:
           dotnet-version: ${{ env.DOTNET_VERSION }}
       
+      # - uses: actions/cache@v3
+      #   with:
+      #     path: ~/.nuget/packages
+      #     key: ${{ runner.os }}-nuget-${{ hashFiles('**/*.csproj*') }}
+      #     restore-keys: |
+      #       ${{ runner.os }}-nuget
+
       # - name: Start SQL Server
       #   run: |
       #     docker run -d -e "ACCEPT_EULA=Y" -e "SA_PASSWORD=Passw0r8" -e "MSSQL_PID=Express" -p 1433:1433 -d mcr.microsoft.com/mssql/server:latest
@@ -35,11 +45,8 @@ jobs:
       #   with:
       #     time: '5s'
 
-      - name: Restore Dependencies ⌚
-        run: dotnet restore
-
       - name: Build App 🚀
-        run: dotnet build -c Release --no-restore
+        run: dotnet build -c Release
       
       - name: Run automated tests 🧪
         env:
@@ -47,7 +54,7 @@ jobs:
         run: dotnet test -c Release --no-build
       
       - name: Publish App 📑
-        run: dotnet publish -c Release -o ./out
+        run: dotnet publish -c Release
       
       # - name: Deploy to azure web app
       #   uses: azure/webapp-deploy@v2
