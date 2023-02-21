@@ -42,8 +42,9 @@ jobs:
               Invoke-Sqlcmd -ServerInstance $instance -Database $DbName -Username $UID -Password $Password -InputFile $file -Verbose *>> $OutputSQLFilePath
               if(!($?))
               {
-                  $errors = Get-Content $OutputSQLFilePath | Out-String
-                  Write-Output $errors
+                  $errors = $files.Name + " Contains Errors 🛑 `n"
+                  $errors += Get-Content $OutputSQLFilePath | Out-String
+                  Write-Output $errors | Out-File -FilePath $OutputSQLFilePath
               }
               else
               {

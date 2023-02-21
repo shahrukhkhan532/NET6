@@ -1,1 +1,1 @@
-SELECT * FRO [ICMServiceBusMessage];
+SELECT * FROM [ICMServiceBusMessag];
