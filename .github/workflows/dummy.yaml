@@ -44,14 +44,14 @@ jobs:
               Invoke-Sqlcmd -ServerInstance $instance -Database $DbName -Username $UID -Password $Password -InputFile $file -Verbose *>> $OutputSQLFilePath
               if(!($?))
               {
-                $message += $files.Name + " File Contains Errors.`n"
+                $message += $file.Name + " File Contains Errors.`n"
                 #$message += (Get-Content $OutputSQLFilePath | Out-String)
                 #$message += $message + "`n"
                 #Write-Output $errors | Out-File -FilePath $OutputSQLFilePath 
               }
               else
               {
-                $message += $files.Name + " Successfully Executed.`n"
+                $message += $file.Name + " Successfully Executed.`n"
                 #Remove-Item $OutputSQLFilePath -Recurse
               }
           }
