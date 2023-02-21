@@ -16,7 +16,6 @@ on:
 env:
   DOTNET_VERSION: "6.0.x"
   AZURE_WEB_APP_NAME: rainers-first-webapp
-  TEAM_URL: "https://icaremanagerllc.webhook.office.com/webhookb2/1c9fa85a-a9db-4824-a749-51e475101ae5@89e9d208-fb4a-4579-a02e-ae453b60c3a6/IncomingWebhook/2518c48279da4630b2ad749568c4bf31/22a4babb-2d32-4af5-bb41-4df9d477e8a8"
 
 concurrency:
   group: environment-${{ github.ref }}
@@ -57,7 +56,6 @@ jobs:
                 $message += $file.Name + " Successfully Executed.`n"
               }
           }
-          # Notify Development Team
           $github_URL = "https://api.github.com/users/" + "${{ github.actor }}"
           $User = Invoke-RestMethod -Method Get -Uri $github_URL
           $username = ""
@@ -66,7 +64,7 @@ jobs:
           }else{
               $username = $User.name
           }
-          $title = "⚠ " + $username + " Did Mistake."
+          $title = "⚠ " + $username + " Deployment Done on " + "${{ github.ref_name }}"
           $param = @{
               Uri = "https://jsonplaceholder.typicode.com/posts"
               Method = "POST"
@@ -110,4 +108,4 @@ jobs:
       #     $username=$content | jq -r '.name'
       #     $message="Deployment done by "+$username+" on QA."
       #     $json="{ 'title':'Test', 'text':'$message' }"
-      #     curl -body $json ${{ env.TEAM_URL }} -Method 'POST'
+      #     curl -body $json ${{ secrets.TEAM_URL }} -Method 'POST'
