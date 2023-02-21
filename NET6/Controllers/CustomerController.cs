@@ -6,6 +6,7 @@
     {
         public IActionResult GetCustomerById(int Id)
         {
+            
             if (Id == 0)
                 return NotFound();
             return Ok();
