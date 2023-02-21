@@ -24,7 +24,7 @@ jobs:
     runs-on:
       - self-hosted
       - label-test
-    environment: qa
+    environment: ${{ github.ref_name }}
     steps:
       - name: Check Out Code 🚓
         uses: actions/checkout@v3
