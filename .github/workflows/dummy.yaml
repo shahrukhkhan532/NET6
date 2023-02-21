@@ -27,8 +27,29 @@ jobs:
       - name: Run SQL Scripts 📜
         shell: PowerShell
         run: |
-          $ee = $ExecutionContext.SessionState.Path.GetUnresolvedProviderPathFromPSPath('.\')
-          Write-Output $ee
+          $path = $ExecutionContext.SessionState.Path.GetUnresolvedProviderPathFromPSPath('.\')
+          $scriptPath = $path + "\DB Script"
+          Write-Output $scriptPath
+
+          $instance = "192.168.7.176\QA"
+          $DbName = "ICM_QA"
+          $UID = "aramzan"
+          $Password = "Temp123$"
+          $OutputSQLFilePath = $path + "\SQL.log"
+
+          $files = Get-ChildItem -Path $scriptPath -Recurse -Include *.sql
+          foreach ($file in $files) {
+              Invoke-Sqlcmd -ServerInstance $instance -Database $DbName -Username $UID -Password $Password -InputFile $file -Verbose *>> $OutputSQLFilePath
+              if(!($?))
+              {
+                  $errors = Get-Content $OutputSQLFilePath | Out-String
+                  Write-Output $errors
+              }
+              else
+              {
+                  #Remove-Item $OutputSQLFilePath -Recurse
+              }
+          }
       
       - name: Restore Dependencies ⌚
         shell: cmd
