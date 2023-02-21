@@ -55,7 +55,7 @@ jobs:
                 }else{
                     $username = $User.name
                 }
-                $title = $User.login + " Did Mistake."
+                $title = $username + " Did Mistake."
                 $param = @{
                     Uri = "https://jsonplaceholder.typicode.com/posts"
                     Method = "POST"
