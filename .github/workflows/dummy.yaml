@@ -70,19 +70,19 @@ jobs:
               }
               else
               {
-                  #Remove-Item $OutputSQLFilePath -Recurse
+                Remove-Item $OutputSQLFilePath -Recurse
               }
           }
       
-      - name: Restore Dependencies ⌚
+      - name: Restore Dependencies 📩
         shell: cmd
         run: dotnet restore /clp:ErrorsOnly
 
-      - name: Build App 🚀
+      - name: Build App 🔳
         shell: cmd
         run: dotnet build -c Release --no-restore /clp:ErrorsOnly
 
-      - name: Publish App 📑
+      - name: Publish App 🚀
         shell: cmd
         run: dotnet publish -c Release -o ./out /clp:ErrorsOnly
 
