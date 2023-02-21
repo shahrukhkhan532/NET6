@@ -45,8 +45,8 @@ jobs:
               if(!($?))
               {
                 $message += $files.Name + " File Contains Errors.`n"
-                $message += (Get-Content $OutputSQLFilePath | Out-String)
-                $message += $message + "`n"
+                #$message += (Get-Content $OutputSQLFilePath | Out-String)
+                #$message += $message + "`n"
                 #Write-Output $errors | Out-File -FilePath $OutputSQLFilePath 
               }
               else
