@@ -32,7 +32,7 @@ jobs:
       - name: Run SQL Scripts 📜
         shell: PowerShell
         run: |
-          $branch = ${{ github.ref_name }}
+          $branch = "${{ github.ref_name }}"
           Write-Output ("THIS IS BRANCH" + $branch)
           $path = $ExecutionContext.SessionState.Path.GetUnresolvedProviderPathFromPSPath('.\')
           $scriptPath = $path + "\DB Script"
