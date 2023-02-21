@@ -42,9 +42,30 @@ jobs:
               Invoke-Sqlcmd -ServerInstance $instance -Database $DbName -Username $UID -Password $Password -InputFile $file -Verbose *>> $OutputSQLFilePath
               if(!($?))
               {
-                  $errors = $files.Name + " Contains Errors 🛑 `n"
+                  $errors = $files.Name + " File Contains Errors`n"
                   $errors += Get-Content $OutputSQLFilePath | Out-String
                   Write-Output $errors | Out-File -FilePath $OutputSQLFilePath
+                  
+                  # Notify Development Team
+                  $User = Invoke-RestMethod -Method Get -Uri "https://api.github.com/users/" + "${{ github.actor }}"
+                  $username = ""
+                  if([string]::IsNullOrEmpty($User.name)){
+                      $username = $User.login
+                  }else{
+                      $username = $User.name
+                  }
+                  $title = $username + " Did Mistake."
+                  $param = @{
+                      Uri = "https://jsonplaceholder.typicode.com/posts"
+                      Method = "POST"
+                      Body = @{
+                          id = 1
+                          title = $title
+                          body = $errors
+                      } | ConvertTo-Json
+                      ContentType = 'application/json'
+                  }
+                  Invoke-RestMethod @param
               }
               else
               {
