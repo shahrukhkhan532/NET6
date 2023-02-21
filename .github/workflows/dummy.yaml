@@ -97,9 +97,10 @@ jobs:
         shell: cmd
         run: |
           %windir%\system32\inetsrv\appcmd stop apppool gh-actions-iis-demo.com
+          if '${{ github.ref_name }}'=='master' (xcopy .\out\* "c:\www\sandbox" /i /s /y /Q)
+          if '${{ github.ref_name }}'=='stagging' (xcopy .\out\* "c:\www\stagging" /i /s /y /Q)
           if '${{ github.ref_name }}'=='qa' (xcopy .\out\* "c:\www\gh-actions-iis-demo.com" /i /s /y /Q)
           if '${{ github.ref_name }}'=='dev' (xcopy .\out\* "c:\www\dev" /i /s /y /Q)
-          if '${{ github.ref_name }}'=='stagging' (xcopy .\out\* "c:\www\stagging" /i /s /y /Q)
           %windir%\system32\inetsrv\appcmd start apppool gh-actions-iis-demo.com
 
       # - name: Notify Development Team 🔔
