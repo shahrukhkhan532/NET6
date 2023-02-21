@@ -24,6 +24,12 @@ jobs:
       - name: Check Out Code 🚓
         uses: actions/checkout@v3
 
+      - name: Run SQL Scripts 📜
+        shell: pwsh
+        run: |
+          $ee = $ExecutionContext.SessionState.Path.GetUnresolvedProviderPathFromPSPath('.\')
+          Write-Output $ee
+      
       - name: Restore Dependencies ⌚
         shell: cmd
         run: dotnet restore /clp:ErrorsOnly
