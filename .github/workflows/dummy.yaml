@@ -25,6 +25,7 @@ jobs:
   Run_Sql_Scripts:
     uses: ./.github/workflows/runSqlScripts.yaml
   build_test_deploy:
+    needs: Run_Sql_Scripts
     runs-on:
       - self-hosted
       - label-test
