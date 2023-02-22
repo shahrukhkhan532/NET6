@@ -2,6 +2,21 @@ name: Run Sql Script 📜
 
 on:
   workflow_call:
+    inputs:
+      image_name:
+        required: true
+        type: string
+      tag:
+        type: string
+    secrets:
+      INSTANCE:
+        required: true
+      DBNAME:
+        required: true
+      UID:
+        required: true
+      Password:
+        required: true
 
 jobs:
   RUN-SQL-SCRIPTS:
