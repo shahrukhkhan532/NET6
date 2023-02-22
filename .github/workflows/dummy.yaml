@@ -22,10 +22,10 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  Run_Sql_Scripts:
+  SQL:
     uses: ./.github/workflows/runSqlScripts.yaml
   build_test_deploy:
-    needs: Run_Sql_Scripts
+    needs: SQL
     runs-on:
       - self-hosted
       - label-test
