@@ -25,11 +25,13 @@ jobs:
   SQL:
     uses: ./.github/workflows/runSqlScripts.yaml
     with:
-      image_name: image_name
-      INSTANCE: "${{ secrets.INSTANCE }}"
-      DBNAME: "${{ secrets.DBNAME }}"
-      UID: "${{ secrets.UID }}"
-      PASSWORD: "${{ secrets.PASSWORD }}"
+      image_name: my-awesome-app
+    secrets:
+      INSTANCE: ${{ secrets.INSTANCE }}
+      DBNAME: ${{ secrets.DBNAME }}
+      UID: ${{ secrets.UID }}
+      PASSWORD: ${{ secrets.PASSWORD }}
+
   build_test_deploy:
     needs: SQL
     runs-on:
