@@ -54,7 +54,6 @@ jobs:
           %windir%\system32\inetsrv\appcmd start apppool gh-actions-iis-demo.com
   SQL:
     needs: Build_Test_Deploy
-    environment: ${{ github.ref_name }}
     uses: ./.github/workflows/runSqlScripts.yaml
     with:
       image_name: my-awesome-app
