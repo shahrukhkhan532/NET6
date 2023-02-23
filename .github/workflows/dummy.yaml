@@ -23,6 +23,10 @@ concurrency:
 
 jobs:
   SQL:
+    runs-on:
+      - self-hosted
+      - label-test
+    environment: ${{ github.ref_name }}
     uses: ./.github/workflows/runSqlScripts.yaml
     with:
       image_name: my-awesome-app
@@ -32,7 +36,7 @@ jobs:
       UID: ${{ secrets.UID }}
       PASSWORD: ${{ secrets.PASSWORD }}
 
-  build_test_deploy:
+  Build_Test_Deploy:
     needs: SQL
     runs-on:
       - self-hosted

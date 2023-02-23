@@ -30,26 +30,25 @@ jobs:
       - name: Run SQL Scripts 📜
         shell: PowerShell
         run: |
-          Write-Output ("THIS IS BRANCH" + $branch)
-          $path = $ExecutionContext.SessionState.Path.GetUnresolvedProviderPathFromPSPath('.\')
-          $scriptPath = $path + "\DB Script"
+          Write-Output ("THIS IS BRANCH - " + $branch)
+          $scriptPath = ((Get-Location) + "\DB Script")
           Write-Output $scriptPath
 
           $instance = "${{ secrets.INSTANCE }}"
           $DbName = "${{ secrets.DBNAME }}"
           $UID = "${{ secrets.UID }}"
           $Password = "${{ secrets.PASSWORD }}"
-          $OutputSQLFilePath = $path + "\SQL.log"
+          $OutputSQLFilePath = ($scriptPath + (Get-Date -UFormat "%d-%m-%Y") + ".log")
 
           $files = Get-ChildItem -Path $scriptPath -Recurse -Include *.sql
-          $message = ""
           foreach ($file in $files) 
           {
-              Invoke-Sqlcmd -ServerInstance $instance -Database $DbName -Username $UID -Password $Password -InputFile $file -Verbose *>> $OutputSQLFilePath
+              Invoke-Sqlcmd -ServerInstance $instance -Database $DbName -Username $UID -Password $Password -InputFile $file
               if(!($?)){
-                $message += $file.Name + " File Contains Errors. Please see logs file in root directory.`n"
+                ($file.Name + " Contains Errors 👇`n") >> $OutputSQLFilePath
+                ($Error[0].Exception.Message + "`n") >> $OutputSQLFilePath
               }else{
-                $message += $file.Name + " Successfully Executed.`n"
+                ($file.Name + " Successfully Executed ✔.`n") >> $OutputSQLFilePath
               }
           }
           $github_URL = "https://api.github.com/users/" + "${{ github.actor }}"
@@ -60,7 +59,8 @@ jobs:
           }else{
               $username = $User.name
           }
-          $title = "⚠ " + $username + " Deployment Done on " + "${{ github.ref_name }}"
+          $title = "Scripts executed on " + "${{ github.ref_name }}" + "by " + $username
+          $message = (Get-Content $OutputSQLFilePath)
           $param = @{
               Uri = "https://jsonplaceholder.typicode.com/posts"
               Method = "POST"
@@ -68,8 +68,8 @@ jobs:
                   id = 1
                   title = $title
                   body = $message
+                  text = $message
               } | ConvertTo-Json
               ContentType = 'application/json'
           }
           Invoke-RestMethod @param
-          $message > ($path + "\LOGS.log")
