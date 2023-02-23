@@ -45,10 +45,10 @@ jobs:
           {
               Invoke-Sqlcmd -ServerInstance $instance -Database $DbName -Username $UID -Password $Password -InputFile $file
               if(!($?)){
-                ($file.Name + " Contains Errors 👇`n") >> $OutputSQLFilePath
+                ($file.Name + " Contains Errors`n") >> $OutputSQLFilePath
                 ($Error[0].Exception.Message + "`n") >> $OutputSQLFilePath
               }else{
-                ($file.Name + " Successfully Executed ✔.`n") >> $OutputSQLFilePath
+                ($file.Name + " Successfully Executed.`n") >> $OutputSQLFilePath
               }
           }
           $github_URL = ("https://api.github.com/users/" + "${{ github.actor }}")
