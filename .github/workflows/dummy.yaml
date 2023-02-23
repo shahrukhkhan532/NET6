@@ -35,7 +35,7 @@ jobs:
         shell: PowerShell
         run: |
           Write-Output ("THIS IS BRANCH - " + "${{ github.ref_name }}")
-          $scriptPath = ((Get-Location) + "\DB Script")
+          $scriptPath = ((Get-Location).path + "\DB Script")
           Write-Output $scriptPath
 
           $instance = "${{ secrets.INSTANCE }}"
@@ -100,7 +100,7 @@ jobs:
         run: |
           dotnet build -c Release --no-restore /clp:ErrorsOnly
           if(!($?)){
-            $path = ((Get-Location) + "\Errors.log")
+            $path = ((Get-Location).path + "\Errors.log"))
             ($Error[0].Exception.Message + "`n") >> $path
 
             $github_URL = ("https://api.github.com/users/" + "${{ github.actor }}")
