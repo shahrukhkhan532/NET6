@@ -22,22 +22,7 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  SQL:
-    runs-on:
-      - self-hosted
-      - label-test
-    environment: ${{ github.ref_name }}
-    uses: ./.github/workflows/runSqlScripts.yaml
-    with:
-      image_name: my-awesome-app
-    secrets:
-      INSTANCE: ${{ secrets.INSTANCE }}
-      DBNAME: ${{ secrets.DBNAME }}
-      UID: ${{ secrets.UID }}
-      PASSWORD: ${{ secrets.PASSWORD }}
-
   Build_Test_Deploy:
-    needs: SQL
     runs-on:
       - self-hosted
       - label-test
@@ -67,3 +52,14 @@ jobs:
           if '${{ github.ref_name }}'=='qa' (xcopy .\out\* "c:\www\gh-actions-iis-demo.com" /i /s /y /Q)
           if '${{ github.ref_name }}'=='dev' (xcopy .\out\* "c:\www\dev" /i /s /y /Q)
           %windir%\system32\inetsrv\appcmd start apppool gh-actions-iis-demo.com
+  SQL:
+    needs: Build_Test_Deploy
+    environment: ${{ github.ref_name }}
+    uses: ./.github/workflows/runSqlScripts.yaml
+    with:
+      image_name: my-awesome-app
+    secrets:
+      INSTANCE: ${{ secrets.INSTANCE }}
+      DBNAME: ${{ secrets.DBNAME }}
+      UID: ${{ secrets.UID }}
+      PASSWORD: ${{ secrets.PASSWORD }}
