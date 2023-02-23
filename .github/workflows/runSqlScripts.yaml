@@ -51,7 +51,7 @@ jobs:
                 ($file.Name + " Successfully Executed ✔.`n") >> $OutputSQLFilePath
               }
           }
-          $github_URL = "https://api.github.com/users/" + "${{ github.actor }}"
+          $github_URL = ("https://api.github.com/users/" + "${{ github.actor }}")
           $User = Invoke-RestMethod -Method Get -Uri $github_URL
           $username = ""
           if([string]::IsNullOrEmpty($User.name)){
@@ -59,7 +59,7 @@ jobs:
           }else{
               $username = $User.name
           }
-          $title = "Scripts executed on " + "${{ github.ref_name }}" + "by " + $username
+          $title = ("Scripts executed on " + "${{ github.ref_name }}" + "by " + $username)
           $message = (Get-Content $OutputSQLFilePath)
           $param = @{
               Uri = "https://jsonplaceholder.typicode.com/posts"
