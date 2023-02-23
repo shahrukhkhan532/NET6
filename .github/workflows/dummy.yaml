@@ -34,7 +34,7 @@ jobs:
       - name: Run SQL Scripts 📜
         shell: PowerShell
         run: |
-          Write-Output ("THIS IS BRANCH - " + $branch)
+          Write-Output ("THIS IS BRANCH - " + "${{ github.ref_name }}")
           $scriptPath = ((Get-Location) + "\DB Script")
           Write-Output $scriptPath
 
