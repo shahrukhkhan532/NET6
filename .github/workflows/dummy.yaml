@@ -22,7 +22,7 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  Build_Test_Deploy:
+  RUN-SQL-SCRIPTS:
     runs-on:
       - self-hosted
       - label-test
@@ -30,6 +30,61 @@ jobs:
     steps:
       - name: Check Out Code 🚓
         uses: actions/checkout@v3
+
+      - name: Run SQL Scripts 📜
+        shell: PowerShell
+        run: |
+          Write-Output ("THIS IS BRANCH - " + $branch)
+          $scriptPath = ((Get-Location) + "\DB Script")
+          Write-Output $scriptPath
+
+          $instance = "${{ secrets.INSTANCE }}"
+          $DbName = "${{ secrets.DBNAME }}"
+          $UID = "${{ secrets.UID }}"
+          $Password = "${{ secrets.PASSWORD }}"
+          $OutputSQLFilePath = ($scriptPath + (Get-Date -UFormat "%d-%m-%Y") + ".log")
+
+          $files = Get-ChildItem -Path $scriptPath -Recurse -Include *.sql
+          foreach ($file in $files) 
+          {
+              Invoke-Sqlcmd -ServerInstance $instance -Database $DbName -Username $UID -Password $Password -InputFile $file
+              if(!($?)){
+                ($file.Name + " Contains Errors`n") >> $OutputSQLFilePath
+                ($Error[0].Exception.Message + "`n") >> $OutputSQLFilePath
+              }else{
+                ($file.Name + " Successfully Executed.`n") >> $OutputSQLFilePath
+              }
+          }
+          $github_URL = ("https://api.github.com/users/" + "${{ github.actor }}")
+          $User = Invoke-RestMethod -Method Get -Uri $github_URL
+          $username = ""
+          if([string]::IsNullOrEmpty($User.name)){
+              $username = $User.login
+          }else{
+              $username = $User.name
+          }
+          $title = ("Scripts executed on " + "${{ github.ref_name }}" + "by " + $username)
+          $message = (Get-Content $OutputSQLFilePath)
+          $param = @{
+              Uri = "https://jsonplaceholder.typicode.com/posts"
+              Method = "POST"
+              Body = @{
+                  id = 1
+                  title = $title
+                  body = $message
+                  text = $message
+              } | ConvertTo-Json
+              ContentType = 'application/json'
+          }
+          Invoke-RestMethod @param
+  Build_Test_Deploy:
+    runs-on:
+      - self-hosted
+      - label-test
+    environment: ${{ github.ref_name }}
+    steps:
+      # - name: Check Out Code 🚓
+      #   uses: actions/checkout@v3
           
       # - name: Restore Dependencies 📩
       #   shell: cmd
@@ -52,13 +107,13 @@ jobs:
       #     if '${{ github.ref_name }}'=='qa' (xcopy .\out\* "c:\www\gh-actions-iis-demo.com" /i /s /y /Q)
       #     if '${{ github.ref_name }}'=='dev' (xcopy .\out\* "c:\www\dev" /i /s /y /Q)
       #     %windir%\system32\inetsrv\appcmd start apppool gh-actions-iis-demo.com
-  SQL:
-    needs: Build_Test_Deploy
-    uses: ./.github/workflows/runSqlScripts.yaml
-    with:
-      image_name: my-awesome-app
-    secrets:
-      INSTANCE: ${{ secrets.INSTANCE }}
-      DBNAME: ${{ secrets.DBNAME }}
-      UID: ${{ secrets.UID }}
-      PASSWORD: ${{ secrets.PASSWORD }}
+  # SQL:
+  #   needs: Build_Test_Deploy
+  #   uses: ./.github/workflows/runSqlScripts.yaml
+  #   with:
+  #     image_name: my-awesome-app
+  #   secrets:
+  #     INSTANCE: ${{ secrets.INSTANCE }}
+  #     DBNAME: ${{ secrets.DBNAME }}
+  #     UID: ${{ secrets.UID }}
+  #     PASSWORD: ${{ secrets.PASSWORD }}
