@@ -99,6 +99,7 @@ jobs:
         shell: PowerShell
         run: |
           $output = Invoke-Expression -Command "dotnet build -c Release --no-restore /clp:ErrorsOnly"
+          Write-Output $output
           if($LASTEXITCODE -ne 0){
               $output > ((Get-Location).path + "\" + (Get-Date -UFormat "%d-%m-%Y") + "-ERRORS" + ".log")
               $github_URL = ("https://api.github.com/users/" + "${{ github.actor }}")
