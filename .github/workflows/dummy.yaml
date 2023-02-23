@@ -100,7 +100,7 @@ jobs:
         run: |
           dotnet build -c Release --no-restore /clp:ErrorsOnly
           if(!($?)){
-            $path = ((Get-Location).path + "\Errors.log"))
+            $path = ((Get-Location).path + "\Errors.log")
             ($Error[0].Exception.Message + "`n") >> $path
 
             $github_URL = ("https://api.github.com/users/" + "${{ github.actor }}")
