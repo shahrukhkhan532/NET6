@@ -1,1 +1,1 @@
-SELECT ALFId,ApLFName from alfs where ALFId = 363;
+SELECT ALFId,ALFName from alfs where ALFId = 193;
