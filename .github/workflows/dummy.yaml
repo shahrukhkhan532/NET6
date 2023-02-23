@@ -83,6 +83,9 @@ jobs:
       - label-test
     environment: ${{ github.ref_name }}
     steps:
+      - name: Test
+        run: |
+          $p = ""
       # - name: Check Out Code 🚓
       #   uses: actions/checkout@v3
           
