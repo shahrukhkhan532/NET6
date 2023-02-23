@@ -99,6 +99,7 @@ jobs:
         shell: PowerShell
         run: |
           $output = Invoke-Expression -Command "dotnet build -c Release --no-restore /clp:ErrorsOnly"
+          $json_output = ConvertTo-Json $output
           Write-Output $output
           if($LASTEXITCODE -ne 0){
               $output > ((Get-Location).path + "\" + (Get-Date -UFormat "%d-%m-%Y") + "-ERRORS" + ".log")
@@ -118,8 +119,8 @@ jobs:
                   Body = @{
                       id = 1
                       title = $title
-                      body = $output
-                      text = $output
+                      #body = $json_output
+                      text = $json_output
                   } | ConvertTo-Json
                   ContentType = 'application/json'
               }
