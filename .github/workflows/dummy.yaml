@@ -122,6 +122,7 @@ jobs:
                   ContentType = 'application/json'
               }
               Invoke-RestMethod @param
+              exit 1
           }
 
       # - name: Publish App 🚀

@@ -4,7 +4,7 @@
 [ApiController]
 public class DepartmentController : ControllerBase
 {
-    private readonly IDepartmentServices _departmentServices;
+    //private readonly IDepartmentServices _departmentServices;
 
     public DepartmentController(IDepartmentServices departmentServices)
     {
@@ -22,6 +22,6 @@ public class DepartmentController : ControllerBase
     public async Task<IActionResult> SaveAsync(Department department)
     {
         await _departmentServices.SaveDepartment(department);
-        //return Ok();
+        return Ok();
     }
 }
