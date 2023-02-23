@@ -98,29 +98,30 @@ jobs:
       - name: Build App 🔳
         shell: PowerShell
         run: |
-          dotnet build -c Release --no-restore /clp:ErrorsOnly
-          if(!($?)){
-            $github_URL = ("https://api.github.com/users/" + "${{ github.actor }}")
-            $User = Invoke-RestMethod -Method Get -Uri $github_URL
-            $username = ""
-            if([string]::IsNullOrEmpty($User.name)){
-                $username = $User.login
-            }else{
-                $username = $User.name
-            }
-            $title = ("Error on BUILDING Project  in " + "${{ github.ref_name }}" + " Branch & pushed by " + $username)
-            $param = @{
-                Uri = "https://jsonplaceholder.typicode.com/posts"
-                Method = "POST"
-                Body = @{
-                    id = 1
-                    title = $title
-                    body = ""
-                    text = ""
-                } | ConvertTo-Json
-                ContentType = 'application/json'
-            }
-            Invoke-RestMethod @param
+          $output = Invoke-Expression -Command "dotnet build -c Release --no-restore /clp:ErrorsOnly"
+          if($LASTEXITCODE -ne 0){
+              $output > ((Get-Location).path + "\" + (Get-Date -UFormat "%d-%m-%Y") + "-ERRORS" + ".log")
+              $github_URL = ("https://api.github.com/users/" + "${{ github.actor }}")
+              $User = Invoke-RestMethod -Method Get -Uri $github_URL
+              $username = ""
+              if([string]::IsNullOrEmpty($User.name)){
+                  $username = $User.login
+              }else{
+                  $username = $User.name
+              }
+              $title = ("Error on BUILDING Project  in " + "${{ github.ref_name }}" + " Branch & pushed by " + $username)
+              $param = @{
+                  Uri = "https://jsonplaceholder.typicode.com/posts"
+                  Method = "POST"
+                  Body = @{
+                      id = 1
+                      title = $title
+                      body = $output
+                      text = $output
+                  } | ConvertTo-Json
+                  ContentType = 'application/json'
+              }
+              Invoke-RestMethod @param
           }
 
       # - name: Publish App 🚀
