@@ -32,6 +32,7 @@ jobs:
           $DbName = "${{ secrets.DEFAULT_DATABASE }}"
           $UID = "${{ secrets.USER_NAME }}"
           $Password = "${{ secrets.PASSWORD }}"
+          
           $ConnectionString = "Server=$instance;Database=$DbName;User Id=$UID;Password=$Password;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;"
 
           $OutputSQLFilePath = ("C:\Users\Shahrukhsrk\actions-runner-icm" + "\" + (Get-Date -UFormat "%d-%m-%Y") + ".log")
