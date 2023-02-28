@@ -25,7 +25,7 @@ jobs:
         run: |
           cd "DB Script"
           $currentPath = (Get-Location).path
-          Write-Output "currentPath -> " + $currentPath
+          Write-Output ("currentPath -> " + $currentPath)
           
 
           $instance = ${{ env.SERVER_NAME }}

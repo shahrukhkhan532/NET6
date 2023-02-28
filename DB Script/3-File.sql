@@ -1,1 +1,1 @@
-SELECT TOP 1 * FROM [User];
+SELECT TOP 1 UserName FROM [User];
