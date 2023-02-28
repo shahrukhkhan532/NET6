@@ -14,7 +14,7 @@ concurrency:
 
 jobs:
   Run-Sql-Scripts:
-    runs-on: [self-hosted, Windows, X64, label-test-icm]
+    runs-on: [self-hosted, Windows, X64, label-test-${{ github.ref_name }}]
     environment: ${{ github.ref_name }}
     steps:
       - name: Check Out Code 🚓
