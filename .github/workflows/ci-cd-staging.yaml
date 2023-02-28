@@ -35,8 +35,7 @@ jobs:
           $UID = "${{ env.USER_NAME }}"
           $Password = "${{ env.PASSWORD }}"
 
-          #$ConnectionString = "Server=$instance;Database=$DbName;User Id=TestDeployment;Password=TestDeployment$;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;"
-          $ConnectionString = 'Server=10.4.0.4;Database=iCM_STG;User Id=TestDeployment;Password=TestDeployment$;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;'
+          $ConnectionString = 'Server=10.4.0.4;Database=iCM_STG;User Id=TestDeployment;Password=TestDeployment$;Encrypt=True;TrustServerCertificate=True;Connection Timeout=30;'
           Write-Output $ConnectionString
 
           $OutputSQLFilePath = ("C:\Users\Shahrukhsrk\actions-runner-icm" + "\" + (Get-Date -UFormat "%d-%m-%Y") + ".log")
