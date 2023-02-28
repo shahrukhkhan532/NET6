@@ -23,7 +23,7 @@ jobs:
       - name: Run Sql Scripts 📜
         shell: PowerShell
         env:
-          SERVER_NAME: ${{ secrets.SERVER_NAME }}
+          SERVER_NAME: ${{ env.SERVER_NAME }}
           DEFAULT_DATABASE: ${{ secrets.DEFAULT_DATABASE }}
           USER_NAME: ${{ secrets.USER_NAME }}
           PASSWORD: ${{ secrets.PASSWORD }}
