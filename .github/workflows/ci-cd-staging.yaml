@@ -44,7 +44,7 @@ jobs:
 
           $OutputSQLFilePath = ("C:\Users\Shahrukhsrk\actions-runner-icm" + "\" + (Get-Date -UFormat "%d-%m-%Y") + ".log")
 
-          $pp = "$env:GITHUB_ACTION_PATH"
+          $pp = $env:GITHUB_ACTION_PATH
           $pp >> $OutputSQLFilePath
 
           if (!(Test-Path $OutputSQLFilePath)) {
