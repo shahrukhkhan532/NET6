@@ -1,1 +1,1 @@
-SELECT Id FROM [ICMServiceBusMessage];
+SELECT TOP 1 * FROM [User];

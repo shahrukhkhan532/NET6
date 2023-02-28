@@ -1,0 +1,165 @@
+name: Continues Integration and Deployment
+
+on:
+  push:
+    branches:
+      - icm
+
+env:
+  DOTNET_VERSION: "6.0.x"
+
+concurrency:
+  group: environment-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  Run-Sql-Scripts:
+    runs-on: [self-hosted, Windows, X64, label-test-icm]
+    environment: ${{ github.ref_name }}
+    steps:
+      - name: Check Out Code 🚓
+        uses: actions/checkout@v2
+
+      - name: Run Sql Scripts 📜
+        shell: PowerShell
+        run: |
+          cd "DB Script"
+          $currentPath = (Get-Location).path
+          Write-Output "currentPath -> " + $currentPath
+
+          $instance = ${{ secrets.SERVER_NAME }}
+          $DbName = "${{ secrets.DEFAULT_DATABASE }}"
+          $UID = "${{ secrets.USER_NAME }}"
+          $Password = "${{ secrets.PASSWORD }}"
+          
+          $OutputSQLFilePath = ("C:\Users\Shahrukhsrk\actions-runner-icm" + "\" + (Get-Date -UFormat "%d-%m-%Y") + ".log")
+          if (!(Test-Path $OutputSQLFilePath)) {
+              New-Item $OutputSQLFilePath -ItemType File
+          }
+
+          $files = Get-ChildItem -Path . -File -Filter *.sql
+          foreach ($file in $files) 
+          {
+              Invoke-Sqlcmd -ServerInstance $instance -Database $DbName -Username $UID -Password $Password -InputFile $file -Verbose *>> $OutputSQLFilePath
+              if(!($?)){
+                ($file.Name + " Contains Errors`n") >> $OutputSQLFilePath
+                #($Error[0].Exception.Message + "`n") >> $OutputSQLFilePath
+              }else{
+                ($file.Name + " executed Successfully.`n") >> $OutputSQLFilePath
+              }
+          }
+          $github_URL = ("https://api.github.com/users/" + "${{ github.actor }}")
+          $User = Invoke-RestMethod -Method Get -Uri $github_URL
+          $username = ""
+          if([string]::IsNullOrEmpty($User.name)){
+              $username = $User.login
+          }else{
+              $username = $User.name
+          }
+          $title = ("Scripts executed on " + "${{ github.ref_name }}" + "by " + $username)
+          Write-Output $title
+          $message = (Get-Content $OutputSQLFilePath)
+          Write-Output $message
+          $param = @{
+              Uri = "https://jsonplaceholder.typicode.com/posts"
+              Method = "POST"
+              Body = @{
+                  id = 1
+                  title = $title
+                  body = $message
+                  text = $message
+              } | ConvertTo-Json
+              ContentType = 'application/json'
+          }
+          Invoke-RestMethod @param
+
+  # Build_Publish_Deploy:
+  #   needs: Run-Sql-Scripts
+  #   runs-on:
+  #     - self-hosted
+  #     - label-${{ github.ref_name }}
+  #   environment: ${{ github.ref_name }}
+  #   defaults:
+  #     run:
+  #       working-directory: ./API
+  #   steps:
+  #     - name: Check Out Code 🚓
+  #       uses: actions/checkout@v3
+
+  #     - name: Restore Dependencies ⌚
+  #       shell: PowerShell
+  #       run: |
+  #         $output = Invoke-Expression -Command "dotnet restore /clp:ErrorsOnly"
+  #         Write-Output $output
+  #         if($LASTEXITCODE -ne 0){
+  #           exit 1
+  #         }
+
+  #     - name: Build App 🚀
+  #       shell: PowerShell
+  #       run: |
+  #         $output = Invoke-Expression -Command "dotnet build -c Release --no-restore /clp:ErrorsOnly"
+  #         $json_output = ConvertTo-Json $output
+  #         Write-Output $output
+  #         if($LASTEXITCODE -ne 0){
+  #             $output > ((Get-Location).path + "\" + (Get-Date -UFormat "%d-%m-%Y") + "-ERRORS" + ".log")
+  #             $github_URL = ("https://api.github.com/users/" + "${{ github.actor }}")
+  #             $User = Invoke-RestMethod -Method Get -Uri $github_URL
+  #             $username = ""
+  #             if([string]::IsNullOrEmpty($User.name)){
+  #                 $username = $User.login
+  #             }else{
+  #                 $username = $User.name
+  #             }
+  #             $title = ("Error on BUILDING Project  in " + "${{ github.ref_name }}" + " Branch & pushed by " + $username)
+  #             $param = @{
+  #                 Uri = "https://icaremanagerllc.webhook.office.com/webhookb2/d3a03a5f-65bc-4bd7-9dd3-58953f34a223@89e9d208-fb4a-4579-a02e-ae453b60c3a6/IncomingWebhook/3455d9958ea94d459fb034b46426e612/22a4babb-2d32-4af5-bb41-4df9d477e8a8"
+  #                 Method = "POST"
+  #                 Body = @{
+  #                     id = 1
+  #                     title = $title
+  #                     text = $json_output
+  #                 } | ConvertTo-Json
+  #                 ContentType = 'application/json'
+  #             }
+  #             Invoke-RestMethod @param
+  #             exit 1
+  #         }
+
+  #     - name: Publish App 📑
+  #       shell: PowerShell
+  #       run: |
+  #         $output = Invoke-Expression -Command "dotnet publish -c Release -o ./out"
+  #         Write-Output $output
+  #         if($LASTEXITCODE -ne 0){
+  #           exit 1
+  #         }
+
+  #     - name: Deploy to Stagging Server ✔
+  #       shell: cmd
+  #       run: |
+  #         %windir%\system32\inetsrv\appcmd stop apppool API
+  #         xcopy .\out\* "C:\Working Directory\API" /i /s /y /Q
+  #         %windir%\system32\inetsrv\appcmd start apppool API
+
+  # Notify_Development_Team:
+  #   needs: Build_Publish_Deploy
+  #   runs-on:
+  #     - self-hosted
+  #     - label-${{ github.ref_name }}
+  #   environment: ${{ github.ref_name }}
+  #   steps:
+  #     - name: Notification 🔔
+  #       shell: PowerShell
+  #       run: |
+  #         $message = ("Auto-Deployment on " + "${{ github.ref_name }}" + " for API is done, please check your work there.")
+  #         Write-Output $message
+  #         $param = @{
+  #             Uri = "https://icaremanagerllc.webhook.office.com/webhookb2/d3a03a5f-65bc-4bd7-9dd3-58953f34a223@89e9d208-fb4a-4579-a02e-ae453b60c3a6/IncomingWebhook/3455d9958ea94d459fb034b46426e612/22a4babb-2d32-4af5-bb41-4df9d477e8a8"
+  #             Method = "POST"
+  #             Body = @{
+  #                 text = $message
+  #             } | ConvertTo-Json
+  #             ContentType = 'application/json'
+  #         }
+  #         Invoke-RestMethod @param
