@@ -35,7 +35,6 @@ jobs:
           
 
           $instance = "$env:SERVER_NAME"
-          Write-Output ("INSTANCE: " + $instance)
           $DbName = "$env:DEFAULT_DATABASE"
           $UID = "$env:USER_NAME"
           $Password = "$env:PASSWORD"
