@@ -1,1 +1,1 @@
-SELECT Id FROM [I;CMServiceBusMessae];
+SELECT Id FROM [Residents];
