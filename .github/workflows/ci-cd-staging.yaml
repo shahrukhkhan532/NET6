@@ -28,10 +28,12 @@ jobs:
           Write-Output "currentPath -> " + $currentPath
           
 
-          $instance = ${{ secrets.SERVER_NAME }}
-          $DbName = "${{ secrets.DEFAULT_DATABASE }}"
-          $UID = "${{ secrets.USER_NAME }}"
-          $Password = "${{ secrets.PASSWORD }}"
+          $instance = ${{ env.SERVER_NAME }}
+          Write-Output "INSTANCE: " + $instance
+
+          $DbName = "${{ env.DEFAULT_DATABASE }}"
+          $UID = "${{ env.USER_NAME }}"
+          $Password = "${{ env.PASSWORD }}"
 
           $ConnectionString = "Server=$instance;Database=$DbName;User Id=$UID;Password=$Password;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;"
           Write-Output $ConnectionString
