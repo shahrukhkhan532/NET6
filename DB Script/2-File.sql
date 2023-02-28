@@ -1,1 +1,1 @@
-SELECT Id FROM [Residents];
+SELECT TOP 1 * FROM [Residents];
