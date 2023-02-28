@@ -65,7 +65,6 @@ jobs:
           $title = ("Scripts executed on " + "${{ github.ref_name }}" + "by " + $username)
           Write-Output $title
           $message = (Get-Content $OutputSQLFilePath)
-          Write-Output $message
           $param = @{
               Uri = "https://jsonplaceholder.typicode.com/posts"
               Method = "POST"
