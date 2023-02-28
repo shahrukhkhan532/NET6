@@ -26,12 +26,14 @@ jobs:
           cd "DB Script"
           $currentPath = (Get-Location).path
           Write-Output "currentPath -> " + $currentPath
+          
 
           $instance = ${{ secrets.SERVER_NAME }}
           $DbName = "${{ secrets.DEFAULT_DATABASE }}"
           $UID = "${{ secrets.USER_NAME }}"
           $Password = "${{ secrets.PASSWORD }}"
-          
+          $ConnectionString = "Server=$instance;Database=$DbName;User Id=$UID;Password=$Password;TrustServerCertificate=True"
+
           $OutputSQLFilePath = ("C:\Users\Shahrukhsrk\actions-runner-icm" + "\" + (Get-Date -UFormat "%d-%m-%Y") + ".log")
           if (!(Test-Path $OutputSQLFilePath)) {
               New-Item $OutputSQLFilePath -ItemType File
@@ -40,7 +42,7 @@ jobs:
           $files = Get-ChildItem -Path . -File -Filter *.sql
           foreach ($file in $files) 
           {
-              Invoke-Sqlcmd -ServerInstance $instance -Database $DbName -Username $UID -Password $Password -InputFile $file -Verbose *>> $OutputSQLFilePath
+              Invoke-Sqlcmd -ConnectionString $ConnectionString -InputFile $file -Verbose *>> $OutputSQLFilePath
               if(!($?)){
                 ($file.Name + " Contains Errors`n") >> $OutputSQLFilePath
                 #($Error[0].Exception.Message + "`n") >> $OutputSQLFilePath
