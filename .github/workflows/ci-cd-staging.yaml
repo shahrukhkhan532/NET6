@@ -3,7 +3,7 @@ name: Continues Integration and Deployment
 on:
   push:
     branches:
-      - icm
+      - icm-k
 
 env:
   DOTNET_VERSION: "6.0.x"

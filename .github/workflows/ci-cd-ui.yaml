@@ -1,0 +1,51 @@
+name: Continues Integration and Deployment
+
+on:
+  push:
+    branches:
+      - icm
+
+concurrency:
+  group: environment-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  Deploy:
+    runs-on:
+      - self-hosted
+      - Windows
+      - X64
+      - label-ui
+    environment: ${{ github.ref_name }}
+    steps:
+      - name: Check Out Code 🚓
+        uses: actions/checkout@v3
+
+      - name: Deploy to Stagging Server ✔
+        shell: cmd
+        run: |
+          xcopy .\hooks\* "C:\www\" /s /d /e /y /Q
+
+  Notify_Development_Team:
+    needs: Deploy
+    runs-on:
+      - self-hosted
+      - Windows
+      - X64
+      - label-ui
+    environment: ${{ github.ref_name }}
+    steps:
+      - name: Notification 🔔
+        shell: PowerShell
+        run: |
+          $title = ("Auto-Deployment on " + "${{ github.ref_name }}" + " for UI is done, please check your work there.")
+          Write-Output $title
+          $param = @{
+              Uri = "https://icaremanagerllc.webhook.office.com/webhookb2/d3a03a5f-65bc-4bd7-9dd3-58953f34a223@89e9d208-fb4a-4579-a02e-ae453b60c3a6/IncomingWebhook/3455d9958ea94d459fb034b46426e612/22a4babb-2d32-4af5-bb41-4df9d477e8a8"
+              Method = "POST"
+              Body = @{
+                  title = $title
+              } | ConvertTo-Json
+              ContentType = 'application/json'
+          }
+          #Invoke-RestMethod @param
