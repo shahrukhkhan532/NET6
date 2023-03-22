@@ -15,4 +15,4 @@ jobs:
 
       - name: Deploy code to FTP server
         run: |
-          lftp -c "set ftp:ssl-allow no; open -u u623109200.akhtarmas,Boingo371! ftp.icreativecode.com; mirror -R ./test/* ./"
+          lftp -c "set ftp:ssl-allow no; open -u u623109200.akhtarmas,Boingo371! ftp.icreativecode.com; mirror -R ./test/ ./"
