@@ -5,14 +5,18 @@ on:
       - ftp_2
 jobs:
   Deploy_Through_FTP:
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
     steps:
       - name: Check Out Code 🚓
         uses: actions/checkout@v3
       
-      - name: Install FTP client ⚙
-        run: sudo apt-get install -y lftp
-
-      - name: Deploy Code to FTP server 🚀
+      - name: Is variable exported? ⚙
+        shell: PowerShell
         run: |
-          lftp -c "set ftp:ssl-allow no; open -u ${{ secrets.FTP_USERNAME }},${{ secrets.FTP_PASSWORD }} ${{ secrets.FTP_HOSTNAME }}; mirror -R ./test/ ./"
+          echo "BUILD_NUMBER=yellow" >> $GITHUB_ENV
+      
+      - name: Read exported variable
+        shell: PowerShell
+        run: |
+          echo "${{ env.BUILD_NUMBER}}"
+          Write-Output "${{ env.BUILD_NUMBER}}"
