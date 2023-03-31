@@ -14,9 +14,12 @@ jobs:
         shell: PowerShell
         run: |
           echo "BUILD_NUMBER=yellow" >> $GITHUB_ENV
+          echo "BUILD_VERSION=yellow" | Out-File -FilePath $Env:GITHUB_ENV -Encoding utf8 -Append
       
       - name: Read exported variable
         shell: PowerShell
         run: |
           echo "${{ env.BUILD_NUMBER}}"
+          echo "${{ env.BUILD_VERSION}}"
           Write-Output "${{ env.BUILD_NUMBER}}"
+          Write-Output "${{ env.BUILD_VERSION}}"
