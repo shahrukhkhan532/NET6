@@ -3,8 +3,6 @@ on:
   push:
     branches:
       - ftp_2
-env:
-  BUILD_VERSION: "UAT"
 jobs:
   Deploy_Through_FTP:
     runs-on: windows-latest
@@ -17,6 +15,7 @@ jobs:
         run: |
           $uu = "Shah Rukh Khan"
           echo "BUILD_VERSION=$uu" | Out-File -FilePath $Env:GITHUB_ENV -Encoding utf8 -Append
+          echo "BUILD_VERSION=$uu" | Out-File -FilePath $Env:GITHUB_OUTPUT -Encoding utf8 -Append
       
       - name: Read exported variable
         shell: PowerShell
