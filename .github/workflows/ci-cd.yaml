@@ -3,11 +3,16 @@ on:
   push:
     branches:
       - ftp_2
+env:
+  BUILD_VERSION: "UAT"
 jobs:
   Deploy_Through_FTP:
     runs-on: windows-latest
-    steps:
+    outputs:
+        BUILD_VERSION: ${{ steps.init.outputs.BUILD_VERSION }}
+    steps:  
       - name: Is variable exported? ⚙
+        id: init
         shell: PowerShell
         run: |
           $uu = "Shah Rukh Khan"
@@ -24,5 +29,4 @@ jobs:
     steps:
       - name: Read exported variable
         shell: PowerShell
-        run: |
-          echo "${{ env.BUILD_VERSION}}"
+        run: echo "${{ needs.Deploy_Through_FTP.outputs.BUILD_VERSION }}"
