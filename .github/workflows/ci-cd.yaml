@@ -7,9 +7,6 @@ jobs:
   Deploy_Through_FTP:
     runs-on: windows-latest
     steps:
-      - name: Check Out Code 🚓
-        uses: actions/checkout@v3
-      
       - name: Is variable exported? ⚙
         shell: PowerShell
         run: |
@@ -20,19 +17,11 @@ jobs:
         shell: PowerShell
         run: |
           echo "${{ env.BUILD_VERSION}}"
-          Write-Output "${{ env.BUILD_VERSION}}"
-          switch ("${{ github.ref_name }}") {
-              "ftp_2" {
-                  Write-Output "QA Branch ..."
-              }
-              "staging" {
-                  $appPoolName = "CareTrackerAPI"
-                  $destinationPath = "C:\Working Directory\CareTrackerAPI"
-                  $sourcePath = (".\" + $branch + "_" + "CTout\*")
-                  Write-Output ("Staging Branch Deployment. App Pool: " + $appPoolName + ", Source: " + $sourcePath + ", Destination: " + $destinationPath)
-              }
-              Default {
-                  Write-Output "The branch is unknown."
-                  exit 1
-              }
-          }
+  
+  Deploy_Through_FTP_2:
+    runs-on: windows-latest
+    steps:
+      - name: Read exported variable
+        shell: PowerShell
+        run: |
+          echo "${{ env.BUILD_VERSION}}"
