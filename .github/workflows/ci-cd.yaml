@@ -29,3 +29,10 @@ jobs:
       - name: Read exported variable
         shell: PowerShell
         run: echo "${{ needs.Deploy_Through_FTP.outputs.BUILD_VERSION }}"
+  Deploy_Through_FTP_3:
+    needs: Deploy_Through_FTP_2
+    runs-on: windows-latest
+    steps:
+      - name: Read exported variable
+        shell: PowerShell
+        run: echo "${{ needs.Deploy_Through_FTP.outputs.BUILD_VERSION }}"
