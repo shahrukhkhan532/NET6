@@ -19,6 +19,7 @@ jobs:
           echo "${{ env.BUILD_VERSION}}"
   
   Deploy_Through_FTP_2:
+    needs: Deploy_Through_FTP
     runs-on: windows-latest
     steps:
       - name: Read exported variable
