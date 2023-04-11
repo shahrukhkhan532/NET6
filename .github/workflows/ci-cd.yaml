@@ -20,6 +20,7 @@ jobs:
         run: |
           # ./powershell/sql.ps1 "10.4.0.4" "iCM_STG" "TestDeployment" "TestDeployment$"
 
+          Set-Item WSMan:\localhost\Client\TrustedHosts -Value "10.4.0.5" -Concatenate -Force
           $username = "webnetworks\Shahrukhsrk"
           $password = "skR00t@1234!!"
           $securePassword = ConvertTo-SecureString -String $password -AsPlainText -Force
