@@ -72,20 +72,12 @@ try {
 
     Install-Certificate -CertificateString $certificateString
     Connect-Vpn -ConnectionName $connectionName -VpnServer $vpnServer -Routes $routes
-    
-    $instance = "10.4.0.4"
-    $DbName = "iCM_STG"
-    $UID = "TestDeployment"
-    $Password = "TestDeployment$"
-    $ConnectionString = 'Server=' + $instance + ';Database=' + $DbName + ';User Id=' + $UID + ';Password=' + $Password + ';Encrypt=True;TrustServerCertificate=True;Connection Timeout=30;'
-
-    Invoke-Sqlcmd -ConnectionString $ConnectionString -Query "SELECT TOP 1 * FROM [User];" -ErrorAction 'Stop'
-
+    Write-Output "VPN Connected Successfully ✔"
 }
 catch {
     Write-Error "An error occurred: $_"
 }
 finally {
     Write-Output "Finally Block..."
-    Disconnect-Vpn -ConnectionName $connectionName
+    # Disconnect-Vpn -ConnectionName $connectionName
 }
