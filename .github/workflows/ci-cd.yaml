@@ -7,6 +7,9 @@ jobs:
   Deploy_Through_FTP:
     runs-on: windows-2022
     steps:  
+      - name: Check Out Code 🚓
+        uses: actions/checkout@v3
+        
       - name: Let's test it
         shell: PowerShell
         run: |
