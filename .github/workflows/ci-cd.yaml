@@ -19,15 +19,7 @@ jobs:
         shell: PowerShell
         run: |
           # ./powershell/sql.ps1 "10.4.0.4" "iCM_STG" "TestDeployment" "TestDeployment$"
-
-          Set-Item WSMan:\localhost\Client\TrustedHosts -Value "10.4.0.5" -Concatenate -Force
-          $username = "webnetworks\Shahrukhsrk"
-          $password = "skR00t@1234!!"
-          $securePassword = ConvertTo-SecureString -String $password -AsPlainText -Force
-          $credential = New-Object -TypeName System.Management.Automation.PSCredential -ArgumentList $username, $securePassword
-          Invoke-Command -ComputerName 10.4.0.5 -Credential $credential -ScriptBlock {
-            Get-ChildItem -Path "C:\" -Directory | Select-Object -ExpandProperty Name  
-          }
+          ./powershell/start-stop-app-pool.ps1 "10.4.0.5" "webnetworks\Shahrukhsrk" "skR00t@1234!!"
     
       - name: VPN Dispose
         shell: PowerShell
