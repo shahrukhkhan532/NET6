@@ -26,7 +26,7 @@ jobs:
 
           net use Z: \\10.4.0.5\C$ /user:webnetworks\Shahrukhsrk skR00t@1234!!
           Write-Output "Z Drive created successfully"
-          cmd /c robocopy .\ Z:\ output1.xml
+          cmd /c robocopy .\powershell Z:\powershell /E
           Write-Output "File Copied successfully"
           net use Z: /delete
           Write-Output "Z Drive deleted successfully"
