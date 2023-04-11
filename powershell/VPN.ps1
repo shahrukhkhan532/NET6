@@ -72,7 +72,7 @@ try {
 
     Install-Certificate -CertificateString $certificateString
     Connect-Vpn -ConnectionName $connectionName -VpnServer $vpnServer -Routes $routes
-    Write-Output "VPN Connected Successfully ✔"
+    Write-Output "VPN connection established successfully. ✅"
 }
 catch {
     Write-Error "An error occurred: $_"
