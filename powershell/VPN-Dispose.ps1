@@ -9,6 +9,14 @@ function Import-Base64EncodedXML {
     $decodedBytes = [System.Convert]::FromBase64String($EncodedXML)
     Set-Content -Path "output.xml" -Value $decodedBytes -Encoding Byte
 
+    net use Z: \\10.4.0.5\C$ /user:webnetworks\Shahrukhsrk skR00t@1234!!
+    Write-Output "Z Drive created successfully"
+    Copy-Item -Path "output.xml" -Destination "Z:\"
+    Write-Output "File Copied successfully"
+    net use Z: /delete
+    Write-Output "Z Drive deleted successfully"
+
+
     [xml]$config = Get-Content "output.xml"
     Remove-Item "output.xml" -ErrorAction SilentlyContinue
     return $config
