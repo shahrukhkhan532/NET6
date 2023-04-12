@@ -95,7 +95,11 @@ jobs:
         shell: PowerShell
         run: |
           #Start-Sleep -Seconds 15
+          route add 192.168.5.0 mask 255.255.255.0 192.168.4.1
+          route add 192.168.6.0 mask 255.255.255.128 192.168.4.1
+          route add 192.168.6.128 mask 255.255.255.128 192.168.4.1
           route add 192.168.7.0 mask 255.255.255.0 192.168.4.1
+          route add 192.168.27.0 mask 255.255.255.0 192.168.4.1
           route print
           ping 192.168.7.176
           ./powershell/sql.ps1 "192.168.7.176\QA" "ICM_QA" "aramzan" 'Temp1234$'
