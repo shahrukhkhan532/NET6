@@ -18,7 +18,7 @@ jobs:
           Invoke-WebRequest -Uri "https://swupdate.openvpn.org/community/releases/openvpn-install-2.4.9-I601-Win10.exe" -OutFile "openvpn-install-2.4.9-I601-Win10.exe"
           Start-Process -FilePath ".\openvpn-install-2.4.9-I601-Win10.exe" -ArgumentList "/S" -Wait
 
-          choco install openvpn --version 2.4.9 -y
+          #choco install openvpn --version 2.4.9 -y
           $env:Path += ";C:\Program Files\OpenVPN\bin"
           ./powershell/OpenVPN.ps1 "IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIw0KIyBTYW1wbGUgY2xpZW50LXNpZGUgT3BlblZQTiAyLjAgY29uZmlnIGZpbGUgIw0KIyBmb3IgY29ubmVjdGluZyB0byBtdWx0aS1jbGllbnQgc2VydmVyLiAgICAgIw0KIyAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIC
           AgICAgIw0KIyBUaGlzIGNvbmZpZ3VyYXRpb24gY2FuIGJlIHVzZWQgYnkgbXVsdGlwbGUgIw0KIyBjbGllbnRzLCBob3dldmVyIGVhY2ggY2xpZW50IHNob3VsZCBoYXZlICAgIw0KIyBpdHMgb3duIGNlcnQgYW5kIGtleSBmaWxlcy4gICAgICAgICAgICAgICAgIw0KIyAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
