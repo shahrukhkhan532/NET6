@@ -80,7 +80,7 @@ jobs:
         shell: PowerShell
         run: |
           #Start-Sleep -Seconds 15
-          ./powershell/sql.ps1 "192.168.7.176\QA" "ICM_QA" "aramzan" "Temp1234$"
+          ./powershell/sql.ps1 "192.168.7.176\QA" "ICM_QA" "aramzan" 'Temp1234$'
           #./powershell/start-stop-app-pool.ps1 "10.4.0.5" "webnetworks\Shahrukhsrk" "skR00t@1234!!"
     
       - name: VPN Dispose
