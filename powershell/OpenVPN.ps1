@@ -6,10 +6,8 @@ function Import-Base64EncodedXML {
         [string]$EncodedFile
     )
     $decodedBytes = [System.Convert]::FromBase64String($EncodedFile)
-    cd "D:\Program Files\OpenVPN\bin"
-    openvpn --help
-    Set-Content -Path "D:\Program Files\OpenVPN\config\output.ovpn" -Value $decodedBytes -Encoding Byte
-    #openvpn --config "D:\Program Files\OpenVPN\config\output.ovpn"
+    Set-Content -Path "output.ovpn" -Value $decodedBytes -Encoding Byte
+    openvpn --config "output.ovpn"
 }
 try {
     Import-Base64EncodedXML -EncodedFile $Base64File
