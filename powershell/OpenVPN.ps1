@@ -14,7 +14,9 @@ function Import-Base64EncodedXML {
     
     Rename-NetAdapter -InterfaceDescription "TAP-Windows Adapter V9" -NewName "Webnetworks"
     # Start-Job -ScriptBlock { openvpn --config "output.ovpn" }
-    Start-Process -FilePath "openvpn" -ArgumentList "--config", "output.ovpn" -WindowStyle Hidden -RedirectStandardOutput "output.txt"
+    Start-Process -FilePath "openvpn" -ArgumentList "--config", '"output.ovpn"' -WindowStyle Hidden -RedirectStandardOutput "logs.txt"
+    Start-Sleep -Seconds 15
+    Get-Content "logs.txt"
     # openvpn --config "output.ovpn"
 }
 try {
