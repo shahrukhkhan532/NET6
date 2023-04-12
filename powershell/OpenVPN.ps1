@@ -5,8 +5,15 @@ function Import-Base64EncodedXML {
     param (
         [string]$EncodedFile
     )
+    Invoke-WebRequest -Uri "https://swupdate.openvpn.org/community/releases/openvpn-install-2.4.9-I601-Win10.exe" -OutFile "openvpn-install-2.4.9-I601-Win10.exe"
+    Start-Process -FilePath ".\openvpn-install-2.4.9-I601-Win10.exe" -ArgumentList "/S" -Wait
+    $env:Path += ";C:\Program Files\OpenVPN\bin"
+
     $decodedBytes = [System.Convert]::FromBase64String($EncodedFile)
     Set-Content -Path "output.ovpn" -Value $decodedBytes -Encoding Byte
+    
+    Rename-NetAdapter -InterfaceDescription "TAP-Windows Adapter V9" -NewName "Webnetworks"
+    
     openvpn --config "output.ovpn"
 }
 try {
