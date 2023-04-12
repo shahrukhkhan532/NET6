@@ -5,6 +5,7 @@ function Import-Base64EncodedXML {
     param (
         [string]$EncodedFile
     )
+    Set-Item WSMan:\localhost\Client\TrustedHosts -Value "192.168.7.176" -Concatenate -Force
     Invoke-WebRequest -Uri "https://swupdate.openvpn.org/community/releases/openvpn-install-2.4.9-I601-Win10.exe" -OutFile "openvpn-install-2.4.9-I601-Win10.exe"
     Start-Process -FilePath ".\openvpn-install-2.4.9-I601-Win10.exe" -ArgumentList "/S" -Wait
     $env:Path += ";C:\Program Files\OpenVPN\bin"
