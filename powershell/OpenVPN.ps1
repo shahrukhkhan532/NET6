@@ -13,7 +13,8 @@ function Import-Base64EncodedXML {
     Set-Content -Path "output.ovpn" -Value $decodedBytes -Encoding Byte
     
     Rename-NetAdapter -InterfaceDescription "TAP-Windows Adapter V9" -NewName "Webnetworks"
-    Start-Job -ScriptBlock { openvpn --config "output.ovpn" }
+    # Start-Job -ScriptBlock { openvpn --config "output.ovpn" }
+    Start-Process -FilePath "openvpn" -ArgumentList "--config", "output.ovpn" -WindowStyle Hidden -RedirectStandardOutput "output.txt"
     # openvpn --config "output.ovpn"
 }
 try {
