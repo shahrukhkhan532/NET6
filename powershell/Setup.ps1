@@ -2,12 +2,15 @@ param (
     [Parameter(Mandatory = $true)]
     [string]$branch,
     [Parameter(Mandatory = $true)]
-    [string]$github__actor
+    [string]$github__actor,
+    [Parameter(Mandatory = $true)]
+    [string]$username,
+    [Parameter(Mandatory = $true)]
+    [string]$password,
+    [Parameter(Mandatory = $true)]
+    [string]$machine__ip
 )
 
-$username = "webnetworks\Shahrukhsrk"
-$password = "skR00t@1234!!"
-$machine__ip = "10.4.0.5"
 net use Z: \\$machine__ip\C$ /user:$username $password
 Set-Item WSMan:\localhost\Client\TrustedHosts -Value $machine__ip -Concatenate -Force
 
@@ -56,23 +59,16 @@ switch ($branch) {
     }
 }
 
-Write-Output "appPoolName=$appPoolName" | Out-File -FilePath $Env:GITHUB_OUTPUT -Encoding utf8 -Append
-Write-Output "destinationPath=$destinationPath" | Out-File -FilePath $Env:GITHUB_OUTPUT -Encoding utf8 -Append
-Write-Output "sourcePath=$sourcePath" | Out-File -FilePath $Env:GITHUB_OUTPUT -Encoding utf8 -Append
+"appPoolName=$appPoolName" >> $Env:GITHUB_OUTPUT
+"destinationPath=$destinationPath" >> $Env:GITHUB_OUTPUT
+"sourcePath=$sourcePath" >> $Env:GITHUB_OUTPUT
+"URL__Webhook=$URL__Webhook" >> $Env:GITHUB_OUTPUT
+"CT__appPoolName=$CT__appPoolName" >> $Env:GITHUB_OUTPUT
+"CT__destinationPath=$CT__destinationPath" >> $Env:GITHUB_OUTPUT
+"CT__sourcePath=$CT__sourcePath" | Out-File -FilePath $Env:GITHUB_OUTPUT
+"Reports__destinationPath=$Reports__destinationPath" >> $Env:GITHUB_OUTPUT
 
-Write-Output "URL__Webhook=$URL__Webhook" | Out-File -FilePath $Env:GITHUB_OUTPUT -Encoding utf8 -Append
-
-Write-Output "CT__appPoolName=$CT__appPoolName" | Out-File -FilePath $Env:GITHUB_OUTPUT -Encoding utf8 -Append
-Write-Output "CT__destinationPath=$CT__destinationPath" | Out-File -FilePath $Env:GITHUB_OUTPUT -Encoding utf8 -Append
-Write-Output "CT__sourcePath=$CT__sourcePath" | Out-File -FilePath $Env:GITHUB_OUTPUT -Encoding utf8 -Append
-
-Write-Output "Reports__destinationPath=$Reports__destinationPath" | Out-File -FilePath $Env:GITHUB_OUTPUT -Encoding utf8 -Append
-
-
-$securePassword = ConvertTo-SecureString -String $password -AsPlainText -Force
-$credential = New-Object -TypeName System.Management.Automation.PSCredential -ArgumentList $username, $securePassword
-
-$SQL_LOG_File_Path = ($path__SQL__To__Directory + "\" + (Get-Date -UFormat "%d-%m-%Y") + ".log")
+$SQL_LOG_File_Path = ($path__SQL__To__Directory + "\" + (Get-Date -UFormat "%d-%m-%Y") + ".html")
 $BUILD_LOG_File_Path = ($path__Build__To__Directory + "\" + (Get-Date -UFormat "%d-%m-%Y") + ".log")
 
 if (-not (Test-Path -Path $path__SQL__To__Directory)) {
@@ -80,20 +76,7 @@ if (-not (Test-Path -Path $path__SQL__To__Directory)) {
 }
 (Test-Path -Path $SQL_LOG_File_Path) -eq $false | New-Item -ItemType File -Path $SQL_LOG_File_Path -ErrorAction SilentlyContinue
 "" > $SQL_LOG_File_Path
-Invoke-Command -ComputerName $machine__ip -Credential $credential -ScriptBlock {
-    param(
-        $path__SQL__To__Directory,
-        $SQL_LOG_File_Path
-    )
-    Write-Output "Connected to staging"
-    # if (-not (Test-Path -Path $path__SQL__To__Directory)) {
-    #     New-Item -ItemType Directory -Path $path__SQL__To__Directory
-    # }
-    # (Test-Path -Path $SQL_LOG_File_Path) -eq $false | New-Item -ItemType File -Path $SQL_LOG_File_Path -ErrorAction SilentlyContinue
-    # "" > $SQL_LOG_File_Path
-} -ArgumentList $path__SQL__To__Directory, $SQL_LOG_File_Path
 
-Write-Output "SQL_LOG_File_Path=$SQL_LOG_File_Path" | Out-File -FilePath $Env:GITHUB_OUTPUT -Encoding utf8 -Append
 
 if (-not (Test-Path -Path $path__Build__To__Directory)) {
     New-Item -ItemType Directory -Path $path__Build__To__Directory
@@ -101,24 +84,26 @@ if (-not (Test-Path -Path $path__Build__To__Directory)) {
 (Test-Path -Path $BUILD_LOG_File_Path) -eq $false | New-Item -ItemType File -Path $BUILD_LOG_File_Path -ErrorAction SilentlyContinue
 "" > $BUILD_LOG_File_Path
 
-Invoke-Command -ComputerName $machine__ip -Credential $credential -ScriptBlock {
-    param(
-        $path__Build__To__Directory,
-        $BUILD_LOG_File_Path
-    )
-    Write-Output "Connected to staging 2"
-    # if (-not (Test-Path -Path $path__Build__To__Directory)) {
-    #     New-Item -ItemType Directory -Path $path__Build__To__Directory
-    # }
-    # (Test-Path -Path $BUILD_LOG_File_Path) -eq $false | New-Item -ItemType File -Path $BUILD_LOG_File_Path -ErrorAction SilentlyContinue
-    # "" > $BUILD_LOG_File_Path
-} -ArgumentList $path__Build__To__Directory, $BUILD_LOG_File_Path
-
-Write-Output "BUILD_LOG_File_Path=$BUILD_LOG_File_Path" | Out-File -FilePath $Env:GITHUB_OUTPUT -Encoding utf8 -Append
+"SQL_LOG_File_Path=$SQL_LOG_File_Path" >> $Env:GITHUB_OUTPUT
+"BUILD_LOG_File_Path=$BUILD_LOG_File_Path" >> $Env:GITHUB_OUTPUT
 
 $User = Invoke-RestMethod -Method Get -Uri ("https://api.github.com/users/" + $github__actor)
 $username = @{$true = $User.login; $false = $User.name }[[string]::IsNullOrEmpty($User.name)]
-Write-Output "Developer__Name=$username" | Out-File -FilePath $Env:GITHUB_OUTPUT -Encoding utf8 -Append
+"Developer__Name=$username" >> $Env:GITHUB_OUTPUT
 
 $message = (Get-Content $Env:GITHUB_OUTPUT) | Out-String
 Write-Output $message
+
+
+# Invoke-Command -ComputerName $machine__ip -Credential $credential -ScriptBlock {
+#     param(
+#         $path__SQL__To__Directory,
+#         $SQL_LOG_File_Path
+#     )
+#     Write-Output "Connected to staging"
+#     # if (-not (Test-Path -Path $path__SQL__To__Directory)) {
+#     #     New-Item -ItemType Directory -Path $path__SQL__To__Directory
+#     # }
+#     # (Test-Path -Path $SQL_LOG_File_Path) -eq $false | New-Item -ItemType File -Path $SQL_LOG_File_Path -ErrorAction SilentlyContinue
+#     # "" > $SQL_LOG_File_Path
+# } -ArgumentList $path__SQL__To__Directory, $SQL_LOG_File_Path
