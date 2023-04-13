@@ -98,7 +98,8 @@ $BUILD_LOG_File_Path = Add-LogFileIfNotExists -path $config['path__Build__To__Di
 "SQL_LOG_File_Path=$SQL_LOG_File_Path" >> $Env:GITHUB_OUTPUT
 "BUILD_LOG_File_Path=$BUILD_LOG_File_Path" >> $Env:GITHUB_OUTPUT
 
-
+$msg = (Get-Content $Env:GITHUB_OUTPUT) | Out-String
+Write-Output $msg
 # Invoke-Command -ComputerName $machine__ip -Credential $credential -ScriptBlock {
 #     param(
 #         $path__SQL__To__Directory,
