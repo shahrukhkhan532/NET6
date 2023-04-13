@@ -5,33 +5,32 @@
     [string]$Password,
     [string]$OutputSQLFilePath
 )
-cd "DB Script"
+Set-Location "DB Script"
 $table = @()
-$msg = ""
+$LogMessage = ""
 $ConnectionString = 'Server=' + $instance + ';Database=' + $DbName + ';User Id=' + $UID + ';Password=' + $Password + ';Encrypt=True;TrustServerCertificate=True;Connection Timeout=30;'
-$files = Get-ChildItem -Path . -File -Filter *.sql
-for ($i = 0; $i -lt $files.Count; $i++) {
-    $file = $files[$i]
-    ("`n------------------- " + $file.Name + " ------------------------ `n ") >> $OutputSQLFilePath
+$SqlFiles = Get-ChildItem -Path . -File -Filter *.sql
+foreach ($SqlFile in $SqlFiles) {
+    ("`n------------------- " + $SqlFile.Name + " ------------------------ `n ") >> $OutputSQLFilePath
     (Get-Date -UFormat "%d-%m-%Y %T") >> $OutputSQLFilePath
-    $file__Name = [System.IO.Path]::GetFileNameWithoutExtension($file)
-    $new_File = ($PWD.Path + "\" + $i + "__" + $file__Name + ".sql")
-    Get-Content -Path $file.FullName -Encoding UTF8 | Set-Content -Encoding utf8 $new_File
+    $file__Name = [System.IO.Path]::GetFileNameWithoutExtension($SqlFile)
+    $new_File = ($PWD.Path + "\" + $SqlFiles.IndexOf($SqlFile) + "__" + $file__Name + ".sql")
+    Get-Content -Path $SqlFile.FullName -Encoding UTF8 | Set-Content -Encoding UTF8 $new_File
     (Get-Content -Path $new_File -Encoding UTF8 -Raw) -replace '\u00A0', ' ' | Set-Content -Encoding UTF8 $new_File
     try {
         Invoke-Sqlcmd -ConnectionString $ConnectionString -InputFile $new_File -ErrorAction 'Stop'
-        ($file.Name + " executed Successfully.`n") >> $OutputSQLFilePath
-        $msg = ($file.Name + " executed Successfully.")
+        ($SqlFile.Name + " executed Successfully.`n") >> $OutputSQLFilePath
+        $LogMessage = ($SqlFile.Name + " executed Successfully.")
     }
     catch {
         "$_" >> $OutputSQLFilePath
-        $msg = "$_"
+        $LogMessage = "$_"
     }
     $row = [PSCustomObject]@{
-        "File"                    = $file.Name
+        "File"           = $SqlFile.Name
         "Execution Date" = (Get-Date -UFormat "%d-%m-%Y")
         "Execution Time" = (Get-Date -UFormat "%T")
-        "Log"                     = $msg
+        "Log"            = $LogMessage
     }
     $table += $row  
 }
