@@ -5,9 +5,63 @@
     [string]$Password,
     [string]$OutputSQLFilePath
 )
-Set-Location "DB Script"
+function Export-LogsToHtml {
+    param (
+        [Parameter(Mandatory = $true)]
+        [System.Collections.ArrayList]$InputTable,
+        [Parameter(Mandatory = $true)]
+        [string]$FilePath,
+        [Parameter(Mandatory = $false)]
+        [string]$Title
+    )
+    $css = @"
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+"@
+    $headerRow = "<tr class='table-info'>" + ($InputTable[0].PSObject.Properties.Name | ForEach-Object { "<th>$_</th>" }) + "</tr>"
+    $dataRows = $InputTable | ForEach-Object {
+        $rowData = "<tr>" + ($_.PSObject.Properties.Value | ForEach-Object { "<td>$_</td>" }) + "</tr>"
+        $rowData
+    }
+    $tableContent = "<table class='table table-striped table-bordered'><thead>$headerRow</thead><tbody>$dataRows</tbody></table>"
+    $htmlContent = @"
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>$Title</title>
+        $css
+    </head>
+    <body class='container'>
+        <h1 class='mt-3'>$Title</h1>
+        $tableContent
+    </body>
+    </html>
+"@
+    try {
+        Set-Content -Path $FilePath -Value $htmlContent -ErrorAction Stop
+    }
+    catch {
+        Write-Error "Failed to save the HTML content to '$FilePath': $_"
+    }
+}
+function CreateHtmlFileIfNotExists {
+    param (
+        [string]$OutputSQLFilePath
+    )
+    $FileInfo = Get-Item -Path $OutputSQLFilePath
+    $HtmlFileName = [System.IO.Path]::GetFileNameWithoutExtension($FileInfo) + ".html"
+    $HtmlFilePath = Join-Path $FileInfo.Directory.FullName $HtmlFileName
+    if (-not (Test-Path $HtmlFilePath)) {
+        New-Item -Path $HtmlFilePath -ItemType File
+    }
+    return $HtmlFilePath;
+}
+
+cd "DB Script"
 $table = @()
 $LogMessage = ""
+
 $ConnectionString = 'Server=' + $instance + ';Database=' + $DbName + ';User Id=' + $UID + ';Password=' + $Password + ';Encrypt=True;TrustServerCertificate=True;Connection Timeout=30;'
 $SqlFiles = Get-ChildItem -Path . -File -Filter *.sql
 foreach ($SqlFile in $SqlFiles) {
@@ -34,4 +88,8 @@ foreach ($SqlFile in $SqlFiles) {
     }
     $table += $row  
 }
+
+$HtmlFilePath = CreateHtmlFileIfNotExists -OutputSQLFilePath $OutputSQLFilePath
+Export-LogsToHtml -InputTable $table -FilePath $HtmlFilePath -Title "Sql Scripts"
 Write-Output ($table | Format-Table -AutoSize -Wrap | Out-String)
+cd ..

@@ -35,10 +35,8 @@ function Set-TrustedHosts {
     param (
         [string]$machine__ip
     )
-    net use Z: \\$machine__ip\C$ /user:$username $password
     Set-Item WSMan:\localhost\Client\TrustedHosts -Value $machine__ip -Concatenate -Force
 }
-
 function Get-Config {
     param (
         [string]$branch,
@@ -76,6 +74,7 @@ function Get-Config {
 $baseDestinationDir = 'Z:'
 $branch = "staging"
 Set-TrustedHosts -machine__ip $machine__ip
+net use Z: \\$machine__ip\C$ /user:$username $password
 $config = Get-Config -branch $branch -baseDestinationDir $baseDestinationDir
 
 if ($null -eq $config) {
@@ -83,13 +82,16 @@ if ($null -eq $config) {
     exit 1
 }
 foreach ($key in $config.Keys) {
-    "$key=$($config[$key])" >> $Env:GITHUB_OUTPUT
+    "$key=$($config[$key])" >> $Env:GITHUB_ENV
 }
 Add-DirectoryIfNotExists -path $config['path__SQL__To__Directory']
 Add-DirectoryIfNotExists -path $config['path__Build__To__Directory']
 
+
 $SQL_LOG_File_Path = Add-LogFileIfNotExists -path $config['path__SQL__To__Directory'] -fileName ((Get-Date -UFormat "%d-%m-%Y") + ".log")
 $BUILD_LOG_File_Path = Add-LogFileIfNotExists -path $config['path__Build__To__Directory'] -fileName ((Get-Date -UFormat "%d-%m-%Y") + ".log")
 
-"SQL_LOG_File_Path=$SQL_LOG_File_Path" >> $Env:GITHUB_OUTPUT
-"BUILD_LOG_File_Path=$BUILD_LOG_File_Path" >> $Env:GITHUB_OUTPUT
+"SQL_LOG_File_Path=$SQL_LOG_File_Path" >> $Env:GITHUB_ENV
+"BUILD_LOG_File_Path=$BUILD_LOG_File_Path" >> $Env:GITHUB_ENV
+
+Write-Output ($Env:SQL_LOG_File_Path + " __test...")
