@@ -54,7 +54,7 @@ jobs:
           $out_directory = ("${{ github.ref_name }}" + "_out")
           dotnet publish -c Release -o ./$out_directory
 
-      - name: Deploy to Server ✔
+      - name: Deploy Api to Server ✔
         shell: PowerShell
         run: |
           $branch = "${{ github.ref_name }}"
@@ -76,14 +76,17 @@ jobs:
               C:\Windows\system32\inetsrv\AppCmd.exe stop apppool /apppool.name:$appPoolName
           } -ArgumentList $appPoolName
 
+          $sourcePath = (".\" + "${{ github.ref_name }}" + "_out")
+          $destinationPath = "Z:\test\"
+          robocopy $sourcePath $destinationPath /E /COPY:DAT /DCOPY:T /XO /NFL /NDL /R:5 /W:10 /MT:8 /LOG+:Z:\test\robocopy.log /V
+
           Invoke-Command -ComputerName 10.4.0.5 -Credential $credential -ScriptBlock {
             param(
               $appPoolName
               )
               C:\Windows\system32\inetsrv\AppCmd.exe start apppool /apppool.name:$appPoolName
           } -ArgumentList $appPoolName
-
-          # robocopy $sourcePath $destinationPath /E /COPY:DAT /DCOPY:T /XO /NFL /NDL
+          cd ..
 
       - name: VPN Dispose
         shell: PowerShell
