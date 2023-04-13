@@ -47,25 +47,25 @@ function Get-Config {
 
     $config = @{
         'staging' = @{
-            'Reports__destinationPath'   = 'Z:\Working Directory\APIReports\bin'
             'appPoolName'                = 'API'
-            'destinationPath'            = 'Z:\Working Directory\API'
             'CT__appPoolName'            = 'CareTrackerAPI'
-            'CT__destinationPath'        = 'Z:\Working Directory\CareTrackerAPI'
             'CT__sourcePath'             = ".\$branch_CTout"
+            'CT__destinationPath'        = Join-Path -Path $baseDestinationDir -ChildPath 'Working Directory\CareTrackerAPI'
+            'destinationPath'            = Join-Path -Path $baseDestinationDir -ChildPath 'Working Directory\API'
+            'Reports__destinationPath'   = Join-Path -Path $baseDestinationDir -ChildPath 'Working Directory\APIReports\bin'
             'path__SQL__To__Directory'   = Join-Path -Path $baseDestinationDir -ChildPath "${branch}_SQL_Logs"
             'path__Build__To__Directory' = Join-Path -Path $baseDestinationDir -ChildPath "${branch}_Build_Logs"
             'URL__Webhook'               = 'https://icaremanagerllc.webhook.office.com/webhookb2/d3a03a5f'
         }
         'master'  = @{
-            'Reports__destinationPath'   = 'Z:\Working Directory - Sandbox\APIReports\bin'
             'appPoolName'                = 'API-Sandbox'
-            'destinationPath'            = 'Z:\Working Directory - Sandbox\API'
             'CT__appPoolName'            = 'CT-Sandbox'
-            'CT__destinationPath'        = 'Z:\Working Directory - Sandbox\CareTrackerAPI'
             'CT__sourcePath'             = ".\$branch_CTout"
-            'path__SQL__To__Directory'   = "C:\Users\$env:USERNAME\actions-runner-sandbox-api\$branch_SQL_Logs"
-            'path__Build__To__Directory' = "C:\Users\$env:USERNAME\actions-runner-sandbox-api\$branch_Build_Logs"
+            'CT__destinationPath'        = Join-Path -Path $baseDestinationDir -ChildPath 'Working Directory - Sandbox\CareTrackerAPI'
+            'Reports__destinationPath'   = Join-Path -Path $baseDestinationDir -ChildPath 'Working Directory - Sandbox\APIReports\bin'
+            'destinationPath'            = Join-Path -Path $baseDestinationDir -ChildPath 'Working Directory - Sandbox\API'
+            'path__SQL__To__Directory'   = Join-Path -Path $baseDestinationDir -ChildPath "${branch}_SQL_Logs"
+            'path__Build__To__Directory' = Join-Path -Path $baseDestinationDir -ChildPath "${branch}_Build_Logs"
             'URL__Webhook'               = 'https://icaremanagerllc.webhook.office.com/webhookb2/bf69bc38'
         }
     }
@@ -79,7 +79,7 @@ Set-TrustedHosts -machine__ip $machine__ip
 $config = Get-Config -branch $branch -baseDestinationDir $baseDestinationDir
 
 if ($null -eq $config) {
-    Write-Output "The branch is unknown."
+    Write-Output "The branch is unknown.❌"
     exit 1
 }
 foreach ($key in $config.Keys) {
@@ -93,18 +93,3 @@ $BUILD_LOG_File_Path = Add-LogFileIfNotExists -path $config['path__Build__To__Di
 
 "SQL_LOG_File_Path=$SQL_LOG_File_Path" >> $Env:GITHUB_OUTPUT
 "BUILD_LOG_File_Path=$BUILD_LOG_File_Path" >> $Env:GITHUB_OUTPUT
-
-$msg = (Get-Content $Env:GITHUB_OUTPUT) | Out-String
-Write-Output $msg
-# Invoke-Command -ComputerName $machine__ip -Credential $credential -ScriptBlock {
-#     param(
-#         $path__SQL__To__Directory,
-#         $SQL_LOG_File_Path
-#     )
-#     Write-Output "Connected to staging"
-#     # if (-not (Test-Path -Path $path__SQL__To__Directory)) {
-#     #     New-Item -ItemType Directory -Path $path__SQL__To__Directory
-#     # }
-#     # (Test-Path -Path $SQL_LOG_File_Path) -eq $false | New-Item -ItemType File -Path $SQL_LOG_File_Path -ErrorAction SilentlyContinue
-#     # "" > $SQL_LOG_File_Path
-# } -ArgumentList $path__SQL__To__Directory, $SQL_LOG_File_Path
