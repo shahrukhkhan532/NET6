@@ -24,7 +24,52 @@ jobs:
         shell: PowerShell
         run: |
           ./powershell/sql.ps1 "10.4.0.4" "iCM_STG" "TestDeployment" 'TestDeployment$' "${{ Env.SQL_LOG_File_Path }}"
+
+      - name: Restore Api Dependencies ⌚
+        shell: PowerShell
+        run: |
+          cd NET6  
+          dotnet restore
+
+      - name: Build Api App 🚀
+        shell: PowerShell
+        run: |
+          $FilePath = "${{ Env.BUILD_LOG_File_Path }}"
+          Start-Transcript -Path $FilePath
+          dotnet build -c Release --no-restore /clp:ErrorsOnly
+          Stop-Transcript
+
+          if($LASTEXITCODE -ne 0){
+            $output = (Get-Content $FilePath) | Out-String
+            $title = ("A build error was encountered in the API project on the " + "${{ github.ref_name }}" + " branch, following a push by " + "${{ Env.Developer__Name }}")
+            $body = @{
+              title = $title
+              text = $output
+            } | ConvertTo-Json
+            # Invoke-RestMethod -Uri "${{ Env.URL__Webhook }}" -Method POST -Body $body -ContentType 'application/json'
+            EXIT 1
+          }
+
+      - name: Publish Api App 📑
+        shell: PowerShell
+        run: |
+          $out_directory = ("${{ github.ref_name }}" + "_out")
+          dotnet publish -c Release -o ./$out_directory
+
+      - name: Deploy to Server ✔
+        shell: PowerShell
+        run: |
+          $branch = "${{ github.ref_name }}"
+          $sourcePath = "${{ Env.sourcePath }}"
+          $destinationPath = "${{ Env.destinationPath }}"
+          $appPoolName = "${{ Env.appPoolName }}"
+
+          Write-Output ($branch + " Branch Deployment. App Pool: " + $appPoolName + ", Source: " + $sourcePath + ", Destination: " + $destinationPath)
+          cd ("${{ github.ref_name }}" + "_out")
           ls
+          # C:\Windows\system32\inetsrv\AppCmd.exe stop apppool /apppool.name:$appPoolName
+          # robocopy $sourcePath $destinationPath /E /COPY:DAT /DCOPY:T /XO /NFL /NDL
+          # C:\Windows\system32\inetsrv\AppCmd.exe start apppool /apppool.name:$appPoolName
 
       - name: VPN Dispose
         shell: PowerShell

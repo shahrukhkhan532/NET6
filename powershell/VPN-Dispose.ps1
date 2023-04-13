@@ -16,6 +16,7 @@ function Import-Base64EncodedXML {
 try {
     $config = Import-Base64EncodedXML -EncodedXML $Base64XMLFile
     $connectionName = $config.VpnProfile.VnetName
+    net use Z: /delete
     rasdial $ConnectionName /disconnect
     Write-Output "VPN has been gracefully disconnected. ✅"
 }
