@@ -93,5 +93,3 @@ $BUILD_LOG_File_Path = Add-LogFileIfNotExists -path $config['path__Build__To__Di
 
 "SQL_LOG_File_Path=$SQL_LOG_File_Path" >> $Env:GITHUB_ENV
 "BUILD_LOG_File_Path=$BUILD_LOG_File_Path" >> $Env:GITHUB_ENV
-
-Write-Output (Get-Content $Env:SQL_LOG_File_Path | Out-String)

@@ -36,9 +36,8 @@ jobs:
         run: |
           $FilePath = "${{ Env.BUILD_LOG_File_Path }}"
           
-          $BuildOutput = dotnet build -c Release /clp:ErrorsOnly 2>&1
-          $BuildOutput | Out-File -FilePath $FilePath -Encoding utf8
-          
+          dotnet build -c Release /clp:ErrorsOnly 2>&1 | Tee-Object -FilePath $FilePath
+
           if($LASTEXITCODE -ne 0){
             $output = (Get-Content $FilePath) | Out-String
             $title = ("A build error was encountered in the API project on the " + "${{ github.ref_name }}" + " branch, following a push by " + "${{ Env.Developer__Name }}")
