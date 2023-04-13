@@ -74,6 +74,7 @@ function Get-Config {
 }
 
 $baseDestinationDir = 'Z:'
+$branch = "staging"
 
 Set-TrustedHosts -machine__ip $machine__ip
 
