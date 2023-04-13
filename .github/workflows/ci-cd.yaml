@@ -36,7 +36,8 @@ jobs:
         run: |
           $FilePath = "${{ Env.BUILD_LOG_File_Path }}"
           
-          dotnet build -c Release /clp:ErrorsOnly 2>&1 | Tee-Object -FilePath $FilePath
+          # dotnet build -c Release /clp:ErrorsOnly 2>&1 | Tee-Object -FilePath $FilePath
+          dotnet build -c Release /clp:ErrorsOnly
 
           if($LASTEXITCODE -ne 0){
             $output = (Get-Content $FilePath) | Out-String
