@@ -96,17 +96,3 @@ $BUILD_LOG_File_Path = Add-LogFileIfNotExists -path $config['path__Build__To__Di
 
 "SQL_LOG_File_Path=$SQL_LOG_File_Path" >> $Env:GITHUB_OUTPUT
 "BUILD_LOG_File_Path=$BUILD_LOG_File_Path" >> $Env:GITHUB_OUTPUT
-
-
-# Invoke-Command -ComputerName $machine__ip -Credential $credential -ScriptBlock {
-#     param(
-#         $path__SQL__To__Directory,
-#         $SQL_LOG_File_Path
-#     )
-#     Write-Output "Connected to staging"
-#     # if (-not (Test-Path -Path $path__SQL__To__Directory)) {
-#     #     New-Item -ItemType Directory -Path $path__SQL__To__Directory
-#     # }
-#     # (Test-Path -Path $SQL_LOG_File_Path) -eq $false | New-Item -ItemType File -Path $SQL_LOG_File_Path -ErrorAction SilentlyContinue
-#     # "" > $SQL_LOG_File_Path
-# } -ArgumentList $path__SQL__To__Directory, $SQL_LOG_File_Path
