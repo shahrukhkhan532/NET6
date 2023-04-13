@@ -83,8 +83,8 @@ if (-not (Test-Path -Path $path__Build__To__Directory)) {
 (Test-Path -Path $BUILD_LOG_File_Path) -eq $false | New-Item -ItemType File -Path $BUILD_LOG_File_Path -ErrorAction SilentlyContinue
 "" > $BUILD_LOG_File_Path
 
-"SQL_LOG_File_Path=$SQL_LOG_File_Path" >> $Env:GITHUB_OUTPUT
-"BUILD_LOG_File_Path=$BUILD_LOG_File_Path" >> $Env:GITHUB_OUTPUT
+("SQL_LOG_File_Path=$SQL_LOG_File_Path") >> $Env:GITHUB_OUTPUT
+("BUILD_LOG_File_Path=$BUILD_LOG_File_Path") >> $Env:GITHUB_OUTPUT
 
 $User = Invoke-RestMethod -Method Get -Uri ("https://api.github.com/users/" + $github__actor)
 $username = @{$true = $User.login; $false = $User.name }[[string]::IsNullOrEmpty($User.name)]
