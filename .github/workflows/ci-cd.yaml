@@ -18,7 +18,7 @@ jobs:
       - name: Setup
         shell: PowerShell
         run: |
-          ./powershell/Setup.ps1 "${{ github.ref_name }}" "${{ github.actor }}"
+          ./powershell/Setup.ps1 "${{ github.ref_name }}" "${{ github.actor }}" "webnetworks\Shahrukhsrk" "skR00t@1234!!" "10.4.0.5"
     
       - name: VPN Dispose
         shell: PowerShell
