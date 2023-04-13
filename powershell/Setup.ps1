@@ -88,7 +88,7 @@ foreach ($key in $config.Keys) {
 Add-DirectoryIfNotExists -path $config['path__SQL__To__Directory']
 Add-DirectoryIfNotExists -path $config['path__Build__To__Directory']
 
-$SQL_LOG_File_Path = Add-LogFileIfNotExists -path $config['path__SQL__To__Directory'] -fileName ((Get-Date -UFormat "%d-%m-%Y") + ".html")
+$SQL_LOG_File_Path = Add-LogFileIfNotExists -path $config['path__SQL__To__Directory'] -fileName ((Get-Date -UFormat "%d-%m-%Y") + ".log")
 $BUILD_LOG_File_Path = Add-LogFileIfNotExists -path $config['path__Build__To__Directory'] -fileName ((Get-Date -UFormat "%d-%m-%Y") + ".log")
 
 "SQL_LOG_File_Path=$SQL_LOG_File_Path" >> $Env:GITHUB_OUTPUT
