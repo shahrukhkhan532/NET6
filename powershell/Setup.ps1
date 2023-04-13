@@ -58,7 +58,6 @@ switch ($branch) {
         exit 1
     }
 }
-
 "appPoolName=$appPoolName" >> $Env:GITHUB_OUTPUT
 "destinationPath=$destinationPath" >> $Env:GITHUB_OUTPUT
 "sourcePath=$sourcePath" >> $Env:GITHUB_OUTPUT
