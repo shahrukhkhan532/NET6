@@ -41,6 +41,7 @@ jobs:
           if($LASTEXITCODE -ne 0){
             $output = (Get-Content $FilePath) | Out-String
             $title = ("A build error was encountered in the API project on the " + "${{ github.ref_name }}" + " branch, following a push by " + "${{ Env.Developer__Name }}")
+            $title >> $FilePath
             $body = @{
               title = $title
               text = $output
