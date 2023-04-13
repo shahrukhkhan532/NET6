@@ -53,6 +53,7 @@ jobs:
       - name: Run-Sql-Scripts
         shell: PowerShell
         run: |
+          net use Z: \\10.4.0.5\C$ /user:webnetworks\Shahrukhsrk skR00t@1234!!
           ./powershell/sql.ps1 "10.4.0.4" "iCM_STG" "TestDeployment" 'TestDeployment$' "${{ needs.Setup.outputs.SQL_LOG_File_Path }}"
 
       - name: VPN Dispose
