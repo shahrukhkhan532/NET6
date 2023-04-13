@@ -9,6 +9,7 @@ $username = "webnetworks\Shahrukhsrk"
 $password = "skR00t@1234!!"
 $machine__ip = "10.4.0.5"
 net use Z: \\$machine__ip\C$ /user:$username $password
+Set-Item WSMan:\localhost\Client\TrustedHosts -Value $machine__ip -Concatenate -Force
 
 $branch = "staging"
 $baseDestinationDir = "Z:"
