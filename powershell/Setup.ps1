@@ -75,30 +75,43 @@ $credential = New-Object -TypeName System.Management.Automation.PSCredential -Ar
 $SQL_LOG_File_Path = ($path__SQL__To__Directory + "\" + (Get-Date -UFormat "%d-%m-%Y") + ".log")
 $BUILD_LOG_File_Path = ($path__Build__To__Directory + "\" + (Get-Date -UFormat "%d-%m-%Y") + ".log")
 
+if (-not (Test-Path -Path $path__SQL__To__Directory)) {
+    New-Item -ItemType Directory -Path $path__SQL__To__Directory
+}
+(Test-Path -Path $SQL_LOG_File_Path) -eq $false | New-Item -ItemType File -Path $SQL_LOG_File_Path -ErrorAction SilentlyContinue
+"" > $SQL_LOG_File_Path
 Invoke-Command -ComputerName $machine__ip -Credential $credential -ScriptBlock {
     param(
         $path__SQL__To__Directory,
         $SQL_LOG_File_Path
     )
-    if (-not (Test-Path -Path $path__SQL__To__Directory)) {
-        New-Item -ItemType Directory -Path $path__SQL__To__Directory
-    }
-    (Test-Path -Path $SQL_LOG_File_Path) -eq $false | New-Item -ItemType File -Path $SQL_LOG_File_Path -ErrorAction SilentlyContinue
-    "" > $SQL_LOG_File_Path
+    Write-Output "Connected to staging"
+    # if (-not (Test-Path -Path $path__SQL__To__Directory)) {
+    #     New-Item -ItemType Directory -Path $path__SQL__To__Directory
+    # }
+    # (Test-Path -Path $SQL_LOG_File_Path) -eq $false | New-Item -ItemType File -Path $SQL_LOG_File_Path -ErrorAction SilentlyContinue
+    # "" > $SQL_LOG_File_Path
 } -ArgumentList $path__SQL__To__Directory, $SQL_LOG_File_Path
 
 Write-Output "SQL_LOG_File_Path=$SQL_LOG_File_Path" | Out-File -FilePath $Env:GITHUB_OUTPUT -Encoding utf8 -Append
+
+if (-not (Test-Path -Path $path__Build__To__Directory)) {
+    New-Item -ItemType Directory -Path $path__Build__To__Directory
+}
+(Test-Path -Path $BUILD_LOG_File_Path) -eq $false | New-Item -ItemType File -Path $BUILD_LOG_File_Path -ErrorAction SilentlyContinue
+"" > $BUILD_LOG_File_Path
 
 Invoke-Command -ComputerName $machine__ip -Credential $credential -ScriptBlock {
     param(
         $path__Build__To__Directory,
         $BUILD_LOG_File_Path
     )
-    if (-not (Test-Path -Path $path__Build__To__Directory)) {
-        New-Item -ItemType Directory -Path $path__Build__To__Directory
-    }
-    (Test-Path -Path $BUILD_LOG_File_Path) -eq $false | New-Item -ItemType File -Path $BUILD_LOG_File_Path -ErrorAction SilentlyContinue
-    "" > $BUILD_LOG_File_Path
+    Write-Output "Connected to staging 2"
+    # if (-not (Test-Path -Path $path__Build__To__Directory)) {
+    #     New-Item -ItemType Directory -Path $path__Build__To__Directory
+    # }
+    # (Test-Path -Path $BUILD_LOG_File_Path) -eq $false | New-Item -ItemType File -Path $BUILD_LOG_File_Path -ErrorAction SilentlyContinue
+    # "" > $BUILD_LOG_File_Path
 } -ArgumentList $path__Build__To__Directory, $BUILD_LOG_File_Path
 
 Write-Output "BUILD_LOG_File_Path=$BUILD_LOG_File_Path" | Out-File -FilePath $Env:GITHUB_OUTPUT -Encoding utf8 -Append
