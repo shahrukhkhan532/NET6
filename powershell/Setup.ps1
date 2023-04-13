@@ -58,14 +58,14 @@ switch ($branch) {
         exit 1
     }
 }
-"appPoolName=$appPoolName" >> $Env:GITHUB_OUTPUT
-"destinationPath=$destinationPath" >> $Env:GITHUB_OUTPUT
-"sourcePath=$sourcePath" >> $Env:GITHUB_OUTPUT
-"URL__Webhook=$URL__Webhook" >> $Env:GITHUB_OUTPUT
-"CT__appPoolName=$CT__appPoolName" >> $Env:GITHUB_OUTPUT
-"CT__destinationPath=$CT__destinationPath" >> $Env:GITHUB_OUTPUT
-"CT__sourcePath=$CT__sourcePath" >> $Env:GITHUB_OUTPUT
-"Reports__destinationPath=$Reports__destinationPath" >> $Env:GITHUB_OUTPUT
+("appPoolName=$appPoolName") >> $Env:GITHUB_OUTPUT
+("destinationPath=$destinationPath") >> $Env:GITHUB_OUTPUT
+("sourcePath=$sourcePath") >> $Env:GITHUB_OUTPUT
+("URL__Webhook=$URL__Webhook") >> $Env:GITHUB_OUTPUT
+("CT__appPoolName=$CT__appPoolName") >> $Env:GITHUB_OUTPUT
+("CT__destinationPath=$CT__destinationPath") >> $Env:GITHUB_OUTPUT
+("CT__sourcePath=$CT__sourcePath") >> $Env:GITHUB_OUTPUT
+("Reports__destinationPath=$Reports__destinationPath") >> $Env:GITHUB_OUTPUT
 
 $SQL_LOG_File_Path = ($path__SQL__To__Directory + "\" + (Get-Date -UFormat "%d-%m-%Y") + ".html")
 $BUILD_LOG_File_Path = ($path__Build__To__Directory + "\" + (Get-Date -UFormat "%d-%m-%Y") + ".log")
