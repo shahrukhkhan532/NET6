@@ -69,6 +69,9 @@ function CreateHtmlFileIfNotExists {
     return $HtmlFilePath;
 }
 
+$HtmlFilePath = CreateHtmlFileIfNotExists -OutputSQLFilePath $OutputSQLFilePath
+
+
 cd "DB Script"
 $table = @()
 $LogMessage = ""
@@ -100,7 +103,6 @@ foreach ($SqlFile in $SqlFiles) {
     $table += $row  
 }
 
-$HtmlFilePath = CreateHtmlFileIfNotExists -OutputSQLFilePath $OutputSQLFilePath
 Export-LogsToHtml -InputTable $table -FilePath $HtmlFilePath -Title "Sql Scripts"
 Write-Output ($table | Format-Table -AutoSize -Wrap | Out-String)
 cd ..
