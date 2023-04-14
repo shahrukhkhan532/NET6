@@ -56,7 +56,9 @@ jobs:
 
       - name: Deploy Api to Server ✔
         shell: PowerShell
-        run: ./powershell/Deploy.ps1
+        run: |
+          # ./powershell/Deploy.ps1 "${{ github.ref_name }}" "${{ Env.appPoolName }}" ("${{ github.ref_name }}" + "_out") "${{ Env.destinationPath }}" "10.4.0.5" "webnetworks\Shahrukhsrk" "skR00t@1234!!"
+          ./powershell/Deploy.ps1 "staging" "${{ Env.appPoolName }}" ("${{ github.ref_name }}" + "_out") "Z:\test" "10.4.0.5" "webnetworks\Shahrukhsrk" "skR00t@1234!!"
 
       - name: VPN Dispose
         shell: PowerShell
