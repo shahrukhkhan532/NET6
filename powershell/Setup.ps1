@@ -86,11 +86,9 @@ if ($null -eq $config) {
 foreach ($key in $config.Keys) {
     [System.Environment]::SetEnvironmentVariable($key, $config[$key], "User")
 }
-[System.Environment]::SetEnvironmentVariable("branch", $branch, "User")
+[System.Environment]::SetEnvironmentVariable("branch", "$branch", "User")
 
 foreach ($key in $config.Keys) {
     $val = [System.Environment]::GetEnvironmentVariable($key, "User")
     Write-Output ("$key = $val")
 }
-
-exit 1

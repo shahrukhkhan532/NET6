@@ -65,14 +65,16 @@ jobs:
         shell: PowerShell
         run: |
           # ./powershell/Deploy.ps1 "${{ github.ref_name }}" "${{ Env.appPoolName }}" ("${{ github.ref_name }}" + "_out") "${{ Env.destinationPath }}" "10.4.0.5" "webnetworks\Shahrukhsrk" "skR00t@1234!!"
-          ./powershell/Deploy.ps1 "staging" "${{ Env.appPoolName }}" ("${{ github.ref_name }}" + "_out") "Z:\test" "10.4.0.5" "webnetworks\Shahrukhsrk" "skR00t@1234!!"
+          $appPoolName = [System.Environment]::GetEnvironmentVariable("appPoolName", "User")
+          $destinationPath = [System.Environment]::GetEnvironmentVariable("destinationPath", "User")
+          $sourcePath = [System.Environment]::GetEnvironmentVariable("sourcePath", "User")
+          ./powershell/Deploy.ps1 "staging" "$appPoolName" "$sourcePath" "Z:\test" "10.4.0.5" "webnetworks\Shahrukhsrk" "skR00t@1234!!"
 
       - name: Notification 🔔
         shell: PowerShell
         run: |
           $OutputSQLFilePath = [System.Environment]::GetEnvironmentVariable("SQL_LOG_File_Path", "User")            
           $URL__Webhook = [System.Environment]::GetEnvironmentVariable("URL__Webhook", "User")            
-          # $OutputSQLFilePath = "${{ Env.SQL_LOG_File_Path }}"
           $message = (Get-Content $OutputSQLFilePath) | Out-String
           Remove-Item -Path $OutputSQLFilePath -Force
           $title = ("The automatic set-up deployment on " + "${{ github.ref_name }}" + " for the API, CareTracker and ICM.API (Reports Project) is complete, please check your work there.")
