@@ -84,25 +84,22 @@ if ($null -eq $config) {
     exit 1
 }
 foreach ($key in $config.Keys) {
-    # "$key=$($config[$key])" >> $Env:GITHUB_ENV
     [System.Environment]::SetEnvironmentVariable($key, $config[$key], "User")
-}
-foreach ($key in $config.Keys) {
-    [System.Environment]::GetEnvironmentVariable($key, "User")
 }
 
 Add-DirectoryIfNotExists -path $config['path__SQL__To__Directory']
 Add-DirectoryIfNotExists -path $config['path__Build__To__Directory']
 
-# Write-Output ("config['path__SQL__To__Directory'] = $config['path__SQL__To__Directory']")
 $SQL_LOG_File_Path = Add-LogFileIfNotExists -path $config['path__SQL__To__Directory'] -fileName ((Get-Date -UFormat "%d-%m-%Y") + ".log")
-# Write-Output ("SQL_LOG_File_Path = $SQL_LOG_File_Path")
 $BUILD_LOG_File_Path = Add-LogFileIfNotExists -path $config['path__Build__To__Directory'] -fileName ((Get-Date -UFormat "%d-%m-%Y") + ".log")
 
-"SQL_LOG_File_Path=$SQL_LOG_File_Path" >> $Env:GITHUB_ENV
-"BUILD_LOG_File_Path=$BUILD_LOG_File_Path" >> $Env:GITHUB_ENV
-"branch=$branch" >> $Env:GITHUB_ENV
+[System.Environment]::SetEnvironmentVariable("SQL_LOG_File_Path", $SQL_LOG_File_Path, "User")
+[System.Environment]::SetEnvironmentVariable("BUILD_LOG_File_Path", $BUILD_LOG_File_Path, "User")
+[System.Environment]::SetEnvironmentVariable("branch", $branch, "User")
 
-$variblesS = (Get-Content $Env:GITHUB_ENV) | Out-String
-Write-Output $variblesS
+foreach ($key in $config.Keys) {
+    ("Getting: $key")
+    [System.Environment]::GetEnvironmentVariable($key, "User")
+}
+
 exit 1
