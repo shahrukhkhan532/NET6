@@ -66,6 +66,7 @@ function CreateHtmlFileIfNotExists {
         [Parameter(Mandatory = $true)]
         [string]$OutputSQLFilePath
     )
+    echo ("OutputSQLFilePath in CreateHtmlFileIfNotExists() = $OutputSQLFilePath")
     if (-not (Test-Path $OutputSQLFilePath)) {
         New-Item -Path $OutputSQLFilePath -ItemType File -Force
     }
