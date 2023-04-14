@@ -76,6 +76,7 @@ function Get-Config {
 $baseDestinationDir = 'Z:'
 Set-TrustedHosts -machine__ip $machine__ip
 net use Z: \\$machine__ip\C$ /user:$username $password
+Write-Output "Connected to Drive Successfully. ✅"
 $config = Get-Config -branch $branch -baseDestinationDir $baseDestinationDir
 
 if ($null -eq $config) {
@@ -92,7 +93,14 @@ Add-DirectoryIfNotExists -path $config['path__Build__To__Directory']
 $SQL_LOG_File_Path = Add-LogFileIfNotExists -path $config['path__SQL__To__Directory'] -fileName ((Get-Date -UFormat "%d-%m-%Y") + ".log")
 $BUILD_LOG_File_Path = Add-LogFileIfNotExists -path $config['path__Build__To__Directory'] -fileName ((Get-Date -UFormat "%d-%m-%Y") + ".log")
 
-"SQL_LOG_File_Path=$SQL_LOG_File_Path" >> $Env:GITHUB_ENV
+$keyName = "SQL_LOG_File_Path"
+$githubEnvContent = Get-Content -Path $Env:GITHUB_ENV
+$keyExists = $githubEnvContent | Where-Object { $_ -match "^$keyName=" }
+if (-not $keyExists) {
+    "SQL_LOG_File_Path=$SQL_LOG_File_Path" >> $Env:GITHUB_ENV
+
+}
+
 "BUILD_LOG_File_Path=$BUILD_LOG_File_Path" >> $Env:GITHUB_ENV
 "branch=$branch" >> $Env:GITHUB_ENV
 $variblesS = (Get-Content $Env:GITHUB_ENV) | Out-String

@@ -49,19 +49,6 @@ function Disconnect-Vpn {
 
     rasdial $ConnectionName /disconnect
 }
-
-function Invoke-SQL {
-    param (
-        [string]$Instance,
-        [string]$DbName,
-        [string]$UID,
-        [string]$Password
-    )
-
-    $ConnectionString = 'Server=' + $Instance + ';Database=' + $DbName + ';User Id=' + $UID + ';Password=' + $Password + ';Encrypt=True;TrustServerCertificate=True;Connection Timeout=30;'
-    Invoke-Sqlcmd -ConnectionString $ConnectionString -Query "SELECT TOP 1 * FROM [User];" -ErrorAction 'Stop'
-}
-
 try {
 
     $config = Import-Base64EncodedXML -EncodedXML $Base64XMLFile
