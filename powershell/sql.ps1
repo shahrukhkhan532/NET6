@@ -74,6 +74,7 @@ function CreateHtmlFileIfNotExists {
     if (-not (Test-Path $HtmlFile)) {
         New-Item -Path $HtmlFile -ItemType File -Force
     }
+    echo ("Before returning html file ptah: $HtmlFile")
     return $HtmlFile;
 }
 
