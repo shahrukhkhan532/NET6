@@ -34,24 +34,24 @@ jobs:
       - name: Build Api App 🚀
         shell: PowerShell
         run: |
-          $FilePath = $Env.BUILD_LOG_File_Path          
+          $FilePath = "${{ Env.BUILD_LOG_File_Path }}"              
           dotnet build -c Release /clp:ErrorsOnly 2>&1 | Tee-Object -FilePath $FilePath
           if($LASTEXITCODE -ne 0){
             $output = (Get-Content $FilePath) | Out-String
-            $title = ("A build error was encountered in the API project on the " + $Env.branch + " branch, following a push by " + $Env.Developer__Name)
+            $title = ("A build error was encountered in the API project on the " + "${{ github.ref_name }}" + " branch, following a push by " + "${{ Env.Developer__Name }}")
             $title >> $FilePath
             $body = @{
               title = $title
               text = $output
             } | ConvertTo-Json
-            # Invoke-RestMethod -Uri $Env.URL__Webhook -Method POST -Body $body -ContentType 'application/json'
+            # Invoke-RestMethod -Uri "${{ Env.URL__Webhook }}" -Method POST -Body $body -ContentType 'application/json'
             EXIT 1
           }
 
       - name: Publish Api App 📑
         shell: PowerShell
         run: |
-          $out_directory = ("${Env.branch}_out")
+          $out_directory = ("${{ github.ref_name }}" + "_out")
           dotnet publish -c Release -o ./$out_directory
 
       - name: Deploy Api to Server ✔
