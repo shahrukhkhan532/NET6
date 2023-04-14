@@ -55,7 +55,7 @@ function Export-LogsToHtml {
     </html>
 "@
     try {
-        Set-Content -Path $FilePath -Value $htmlContent -ErrorAction Stop
+        $htmlContent > $FilePath
     }
     catch {
         Write-Error "Failed to save the HTML content to '$FilePath': $_"
@@ -64,20 +64,20 @@ function Export-LogsToHtml {
 function CreateHtmlFileIfNotExists {
     param (
         [Parameter(Mandatory = $true)]
-        [string]$OutputSQLFilePath
+        [string]$OutputFilePath
     )
-    echo ("OutputSQLFilePath in CreateHtmlFileIfNotExists() = $OutputSQLFilePath")
-    if (-not (Test-Path $OutputSQLFilePath)) {
-        New-Item -Path $OutputSQLFilePath -ItemType File -Force
+    Write-Output ("OutputSQLFilePath in CreateHtmlFileIfNotExists() = $OutputFilePath")
+    if (-not (Test-Path $OutputFilePath)) {
+        New-Item -Path $OutputFilePath -ItemType File -Force
     }
-    $HtmlFilePath = [System.IO.Path]::ChangeExtension($OutputSQLFilePath, ".html")
-    if (-not (Test-Path $HtmlFilePath)) {
-        New-Item -Path $HtmlFilePath -ItemType File -Force
+    $HtmlFile = [System.IO.Path]::ChangeExtension($OutputFilePath, ".html")
+    if (-not (Test-Path $HtmlFile)) {
+        New-Item -Path $HtmlFile -ItemType File -Force
     }
-    return $HtmlFilePath;
+    return $HtmlFile;
 }
 
-$HtmlFilePath = CreateHtmlFileIfNotExists -OutputSQLFilePath $OutputSQLFilePath
+$HtmlFilePath = CreateHtmlFileIfNotExists -OutputFilePath $OutputSQLFilePath
 Write-Output ("HtmlFilePath = $HtmlFilePath")
 
 
