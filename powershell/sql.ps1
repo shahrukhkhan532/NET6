@@ -61,25 +61,14 @@ function Export-LogsToHtml {
         Write-Error "Failed to save the HTML content to '$FilePath': $_"
     }
 }
-function CreateHtmlFileIfNotExists {
-    param (
-        [Parameter(Mandatory = $true)]
-        [string]$OutputFilePath
-    )
-    Write-Output ("OutputSQLFilePath in CreateHtmlFileIfNotExists() = $OutputFilePath")
-    if (-not (Test-Path $OutputFilePath)) {
-        New-Item -Path $OutputFilePath -ItemType File -Force
-    }
-    $HtmlFile = [System.IO.Path]::ChangeExtension($OutputFilePath, ".html")
-    if (-not (Test-Path $HtmlFile)) {
-        New-Item -Path $HtmlFile -ItemType File -Force
-    }
-    echo ("Before returning html file ptah: $HtmlFile")
-    return $HtmlFile;
-}
 
-$HtmlFilePath = CreateHtmlFileIfNotExists -OutputFilePath $OutputSQLFilePath
-Write-Output ("HtmlFilePath = $HtmlFilePath")
+
+Write-Output ("OutputSQLFilePath = $OutputSQLFilePath")
+$HtmlFile = [System.IO.Path]::ChangeExtension($OutputSQLFilePath, ".html")
+if (-not (Test-Path $HtmlFile)) {
+    New-Item -Path $HtmlFile -ItemType File -Force
+}
+Write-Output ("Before returning html file ptah: $HtmlFile")
 
 
 cd "DB Script"
@@ -113,6 +102,6 @@ foreach ($SqlFile in $SqlFiles) {
     $table += $row  
 }
 
-Export-LogsToHtml -InputTable $table -FilePath $HtmlFilePath -Title "Sql Scripts"
+Export-LogsToHtml -InputTable $table -FilePath "$HtmlFile" -Title "Sql Scripts"
 Write-Output ($table | Format-Table -AutoSize -Wrap | Out-String)
 cd ..
