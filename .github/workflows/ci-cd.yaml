@@ -37,6 +37,9 @@ jobs:
         shell: PowerShell
         run: |
           $FilePath = [System.Environment]::GetEnvironmentVariable("BUILD_LOG_File_Path", "User")  
+          if (-not (Test-Path $FilePath)) {
+            New-Item -Path $FilePath -ItemType File -Force
+          }
           $Developer__Name = [System.Environment]::GetEnvironmentVariable("Developer__Name", "User")  
           $URL__Webhook = [System.Environment]::GetEnvironmentVariable("URL__Webhook", "User")  
           dotnet build -c Release /clp:ErrorsOnly 2>&1 | Tee-Object -FilePath $FilePath

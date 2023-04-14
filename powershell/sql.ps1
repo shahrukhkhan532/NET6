@@ -63,12 +63,10 @@ function Export-LogsToHtml {
 }
 
 
-Write-Output ("OutputSQLFilePath = $OutputSQLFilePath")
 $HtmlFile = [System.IO.Path]::ChangeExtension($OutputSQLFilePath, ".html")
 if (-not (Test-Path $HtmlFile)) {
     New-Item -Path $HtmlFile -ItemType File -Force
 }
-Write-Output ("Before returning html file ptah: $HtmlFile")
 
 
 cd "DB Script"
