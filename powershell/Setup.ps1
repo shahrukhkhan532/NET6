@@ -45,6 +45,7 @@ function Get-Config {
 
     $config = @{
         'staging' = @{
+            'sourcePath'                 = (".\${branch}_out")
             'appPoolName'                = 'API'
             'CT__appPoolName'            = 'CareTrackerAPI'
             'CT__sourcePath'             = ".\$branch_CTout"
@@ -56,6 +57,7 @@ function Get-Config {
             'URL__Webhook'               = 'https://icaremanagerllc.webhook.office.com/webhookb2/d3a03a5f'
         }
         'master'  = @{
+            'sourcePath'                 = (".\${branch}_out")
             'appPoolName'                = 'API-Sandbox'
             'CT__appPoolName'            = 'CT-Sandbox'
             'CT__sourcePath'             = ".\$branch_CTout"
@@ -93,3 +95,4 @@ $BUILD_LOG_File_Path = Add-LogFileIfNotExists -path $config['path__Build__To__Di
 
 "SQL_LOG_File_Path=$SQL_LOG_File_Path" >> $Env:GITHUB_ENV
 "BUILD_LOG_File_Path=$BUILD_LOG_File_Path" >> $Env:GITHUB_ENV
+"branch=$branch" >> $Env:GITHUB_ENV
