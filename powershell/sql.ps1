@@ -18,11 +18,22 @@ function Export-LogsToHtml {
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 "@
     $headerRow = "<tr class='table-info'>" + ($InputTable[0].PSObject.Properties.Name | ForEach-Object { "<th>$_</th>" }) + "</tr>"
-    $dataRows = $InputTable | ForEach-Object {
-        $rowData = "<tr>" + ($_.PSObject.Properties.Value | ForEach-Object { "<td>$_</td>" }) + "</tr>"
-        $rowData
+    $tableRow = ""
+    foreach ($row in $InputTable) {
+        if ($row.Log.ToString().Contains("Level")) {
+            $tableRow += "<tr class='table-danger'>"
+        }
+        else {
+            $tableRow += "<tr>"
+        }
+        $tableRow += "<td>$($row.File)</td>"
+        $tableRow += "<td>$($row.'Execution Date')</td>"
+        $tableRow += "<td>$($row.'Execution Time')</td>"
+        $tableRow += "<td>$($row.Log)</td>"
+        $tableRow += "</tr>"
     }
-    $tableContent = "<table class='table table-striped table-bordered'><thead>$headerRow</thead><tbody>$dataRows</tbody></table>"
+
+    $tableContent = "<table class='table table-striped table-bordered'><thead>$headerRow</thead><tbody>$tableRow</tbody></table>"
     $htmlContent = @"
     <!DOCTYPE html>
     <html lang="en">
