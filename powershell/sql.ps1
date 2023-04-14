@@ -1,8 +1,13 @@
 ﻿param (
+    [Parameter(Mandatory = $true)]
     [string]$Instance,
+    [Parameter(Mandatory = $true)]
     [string]$DbName,
+    [Parameter(Mandatory = $true)]
     [string]$UID,
+    [Parameter(Mandatory = $true)]
     [string]$Password,
+    [Parameter(Mandatory = $true)]
     [string]$OutputSQLFilePath
 )
 function Export-LogsToHtml {
@@ -58,6 +63,7 @@ function Export-LogsToHtml {
 }
 function CreateHtmlFileIfNotExists {
     param (
+        [Parameter(Mandatory = $true)]
         [string]$OutputSQLFilePath
     )
     $FileInfo = Get-Item -Path $OutputSQLFilePath
@@ -70,6 +76,7 @@ function CreateHtmlFileIfNotExists {
 }
 
 $HtmlFilePath = CreateHtmlFileIfNotExists -OutputSQLFilePath $OutputSQLFilePath
+echo ("HtmlFilePath = $HtmlFilePath")
 
 
 cd "DB Script"
