@@ -18,7 +18,8 @@ jobs:
       - name: Setup
         shell: PowerShell
         run: |
-          ./powershell/Setup.ps1 "${{ github.ref_name }}" "${{ github.actor }}" "webnetworks\Shahrukhsrk" "skR00t@1234!!" "10.4.0.5"
+          # ./powershell/Setup.ps1 "${{ github.ref_name }}" "${{ github.actor }}" "webnetworks\Shahrukhsrk" "skR00t@1234!!" "10.4.0.5"
+          ./powershell/Setup.ps1 "staging" "${{ github.actor }}" "webnetworks\Shahrukhsrk" "skR00t@1234!!" "10.4.0.5"
 
       - name: Run-Sql-Scripts
         shell: PowerShell

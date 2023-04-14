@@ -26,7 +26,7 @@ function Add-LogFileIfNotExists {
 
     $logFilePath = Join-Path -Path $path -ChildPath $fileName
     if (-not (Test-Path -Path $logFilePath)) {
-        New-Item -ItemType File -Path $logFilePath -ErrorAction SilentlyContinue
+        New-Item -ItemType File -Path $logFilePath -ErrorAction Stop
     }
     "" > $logFilePath
     return $logFilePath
@@ -74,7 +74,6 @@ function Get-Config {
 }
 
 $baseDestinationDir = 'Z:'
-$branch = "staging"
 Set-TrustedHosts -machine__ip $machine__ip
 net use Z: \\$machine__ip\C$ /user:$username $password
 $config = Get-Config -branch $branch -baseDestinationDir $baseDestinationDir
@@ -96,3 +95,5 @@ $BUILD_LOG_File_Path = Add-LogFileIfNotExists -path $config['path__Build__To__Di
 "SQL_LOG_File_Path=$SQL_LOG_File_Path" >> $Env:GITHUB_ENV
 "BUILD_LOG_File_Path=$BUILD_LOG_File_Path" >> $Env:GITHUB_ENV
 "branch=$branch" >> $Env:GITHUB_ENV
+$variblesS = (Get-Content $Env:GITHUB_ENV) | Out-String
+Write-Output $variblesS
