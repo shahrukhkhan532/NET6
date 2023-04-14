@@ -66,6 +66,9 @@ function CreateHtmlFileIfNotExists {
         [Parameter(Mandatory = $true)]
         [string]$OutputSQLFilePath
     )
+    if (-not (Test-Path $OutputSQLFilePath)) {
+        New-Item -Path $OutputSQLFilePath -ItemType File -Force
+    }
     $FileInfo = Get-Item -Path $OutputSQLFilePath
     $HtmlFileName = [System.IO.Path]::GetFileNameWithoutExtension($FileInfo) + ".html"
     $HtmlFilePath = Join-Path $FileInfo.Directory.FullName $HtmlFileName
