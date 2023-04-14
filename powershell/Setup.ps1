@@ -88,7 +88,11 @@ foreach ($key in $config.Keys) {
 }
 [System.Environment]::SetEnvironmentVariable("branch", "$branch", "User")
 
-foreach ($key in $config.Keys) {
-    $val = [System.Environment]::GetEnvironmentVariable($key, "User")
-    Write-Output ("$key = $val")
-}
+# foreach ($key in $config.Keys) {
+#     $val = [System.Environment]::GetEnvironmentVariable($key, "User")
+#     Write-Output ("$key = $val")
+# }
+
+$User = Invoke-RestMethod -Method Get -Uri ("https://api.github.com/users/$github__actor")
+$username = @{$true = $User.login; $false = $User.name }[[string]::IsNullOrEmpty($User.name)]
+[System.Environment]::SetEnvironmentVariable("Developer__Name", "$username", "User")

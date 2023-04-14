@@ -24,12 +24,17 @@ jobs:
       - name: Run-Sql-Scripts
         shell: PowerShell
         run: |
+          $Developer__Name = [System.Environment]::GetEnvironmentVariable("Developer__Name", "User")  
+          $branch = [System.Environment]::GetEnvironmentVariable("branch", "User")  
+          echo "DEV: $Developer__Name"
+          echo "BRANCH: $branch"
           $SQL_LOG_File_Path = [System.Environment]::GetEnvironmentVariable("SQL_LOG_File_Path", "User")
           ./powershell/sql.ps1 "10.4.0.4" "iCM_STG" "TestDeployment" 'TestDeployment$' "$SQL_LOG_File_Path"
 
       - name: Restore Api Dependencies ⌚
         shell: PowerShell
         run: |
+          exit 1
           cd NET6  
           dotnet restore
 
@@ -58,8 +63,8 @@ jobs:
       - name: Publish Api App 📑
         shell: PowerShell
         run: |
-          $out_directory = ("${{ github.ref_name }}" + "_out")
-          dotnet publish -c Release -o ./$out_directory
+          $sourcePath = [System.Environment]::GetEnvironmentVariable("sourcePath", "User")
+          dotnet publish -c Release -o ./$sourcePath
 
       - name: Deploy Api to Server ✔
         shell: PowerShell
