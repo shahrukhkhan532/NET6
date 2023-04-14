@@ -24,7 +24,8 @@ jobs:
       - name: Run-Sql-Scripts
         shell: PowerShell
         run: |
-          ./powershell/sql.ps1 "10.4.0.4" "iCM_STG" "TestDeployment" 'TestDeployment$' "${{ Env.SQL_LOG_File_Path }}"
+          $SQL_LOG_File_Path = [System.Environment]::GetEnvironmentVariable("SQL_LOG_File_Path", "User")
+          ./powershell/sql.ps1 "10.4.0.4" "iCM_STG" "TestDeployment" 'TestDeployment$' "$SQL_LOG_File_Path"
 
       - name: Restore Api Dependencies ⌚
         shell: PowerShell
@@ -35,17 +36,19 @@ jobs:
       - name: Build Api App 🚀
         shell: PowerShell
         run: |
-          $FilePath = "${{ Env.BUILD_LOG_File_Path }}"              
+          $FilePath = [System.Environment]::GetEnvironmentVariable("BUILD_LOG_File_Path", "User")  
+          $Developer__Name = [System.Environment]::GetEnvironmentVariable("Developer__Name", "User")  
+          $URL__Webhook = [System.Environment]::GetEnvironmentVariable("URL__Webhook", "User")  
           dotnet build -c Release /clp:ErrorsOnly 2>&1 | Tee-Object -FilePath $FilePath
           if($LASTEXITCODE -ne 0){
             $output = (Get-Content $FilePath) | Out-String
-            $title = ("A build error was encountered in the API project on the " + "${{ github.ref_name }}" + " branch, following a push by " + "${{ Env.Developer__Name }}")
+            $title = ("A build error was encountered in the API project on the " + "${{ github.ref_name }}" + " branch, following a push by " + "$Developer__Name")
             $title >> $FilePath
             $body = @{
               title = $title
               text = $output
             } | ConvertTo-Json
-            # Invoke-RestMethod -Uri "${{ Env.URL__Webhook }}" -Method POST -Body $body -ContentType 'application/json'
+            # Invoke-RestMethod -Uri "$URL__Webhook" -Method POST -Body $body -ContentType 'application/json'
             EXIT 1
           }
 
@@ -64,7 +67,9 @@ jobs:
       - name: Notification 🔔
         shell: PowerShell
         run: |
-          $OutputSQLFilePath = "${{ Env.SQL_LOG_File_Path }}"
+          $OutputSQLFilePath = [System.Environment]::GetEnvironmentVariable("SQL_LOG_File_Path", "User")            
+          $URL__Webhook = [System.Environment]::GetEnvironmentVariable("URL__Webhook", "User")            
+          # $OutputSQLFilePath = "${{ Env.SQL_LOG_File_Path }}"
           $message = (Get-Content $OutputSQLFilePath) | Out-String
           Remove-Item -Path $OutputSQLFilePath -Force
           $title = ("The automatic set-up deployment on " + "${{ github.ref_name }}" + " for the API, CareTracker and ICM.API (Reports Project) is complete, please check your work there.")
@@ -73,7 +78,7 @@ jobs:
             text = $message
           } | ConvertTo-Json
           echo $body
-          # Invoke-RestMethod -Uri "${{ Env.URL__Webhook }}" -Method POST -Body $body -ContentType 'application/json'
+          # Invoke-RestMethod -Uri "$URL__Webhook" -Method POST -Body $body -ContentType 'application/json'
 
       - name: VPN Dispose
         shell: PowerShell

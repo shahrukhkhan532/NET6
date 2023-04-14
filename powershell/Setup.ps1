@@ -89,8 +89,8 @@ foreach ($key in $config.Keys) {
 [System.Environment]::SetEnvironmentVariable("branch", $branch, "User")
 
 foreach ($key in $config.Keys) {
-    ("Getting: $key")
-    [System.Environment]::GetEnvironmentVariable($key, "User")
+    $val = [System.Environment]::GetEnvironmentVariable($key, "User")
+    Write-Output ("$key = $val")
 }
 
 exit 1
