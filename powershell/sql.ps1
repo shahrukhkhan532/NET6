@@ -76,7 +76,7 @@ function CreateHtmlFileIfNotExists {
 }
 
 $HtmlFilePath = CreateHtmlFileIfNotExists -OutputSQLFilePath $OutputSQLFilePath
-echo ("HtmlFilePath = $HtmlFilePath")
+Write-Output ("HtmlFilePath = $HtmlFilePath")
 
 
 cd "DB Script"
