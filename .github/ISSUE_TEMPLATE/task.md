@@ -1,6 +1,13 @@
+---
+name: Task
+about: Create a report to help us improve
+title: ''
+labels: ''
+assignees: ''
+
+---
+
 ## Task
-name: "Bug report"
-description: true
 ### Description
 Please provide a brief description of the task.
 
