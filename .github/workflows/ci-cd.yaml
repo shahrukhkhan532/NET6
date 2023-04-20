@@ -31,11 +31,24 @@ jobs:
           $SQL_LOG_File_Path = [System.Environment]::GetEnvironmentVariable("SQL_LOG_File_Path", "User")
           # ./powershell/sql.ps1 "10.4.0.4" "iCM_STG" "TestDeployment" 'TestDeployment$' "$SQL_LOG_File_Path"
 
-      - name: Download artifact
-        uses: actions/download-artifact@v2
-        with:
-          name: my-artifact
-          path: ${{ env.artifactPath }}
+      - name: Download artifact from previous push
+        shell: pwsh
+        env:
+          TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          Write-Host "Fetching latest artifact..."
+          $headers = @{
+            'authorization' = "Bearer $($env:TOKEN)"
+            'content-type'  = 'application/json'
+          }
+          $artifacts = Invoke-RestMethod -Method Get -Uri "https://api.github.com/repos/$($env:GITHUB_REPOSITORY)/actions/artifacts" -Headers $headers
+          $downloadUrl = $artifacts.artifacts[0].archive_download_url
+        
+          Write-Host "Downloading artifact..."
+          Invoke-WebRequest -Uri $downloadUrl -Headers $headers -OutFile artifact2.zip
+        
+          Write-Host "Unzipping artifact..."
+          Expand-Archive -Path artifact2.zip -DestinationPath 'C:\Users\runneradmin\.nuget\'
 
       - name: Restore Api Dependencies ⌚
         shell: PowerShell
