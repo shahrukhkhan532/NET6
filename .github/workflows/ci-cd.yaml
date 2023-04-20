@@ -48,18 +48,19 @@ jobs:
           # Invoke-WebRequest -Uri $downloadUrl -Headers $headers -OutFile artifact2.zip -UseBasicParsing
 
           $url = $downloadUrl
-          $output = "artifact2.zip"
+          $outputFile = "artifact2.zip"
 
           $httpClient = New-Object System.Net.Http.HttpClient
           $httpClient.DefaultRequestHeaders.Authorization = New-Object System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", $env:TOKEN)
 
-          try {
-              $stream = $httpClient.GetStreamAsync($url).Result
-              $fileStream = [System.IO.File]::Create($output)
-              $stream.CopyTo($fileStream)
-          } finally {
-              if ($fileStream) { $fileStream.Dispose() }
-              if ($stream) { $stream.Dispose() }
+          $response = $httpClient.GetAsync($url).Result
+
+          if ($response.IsSuccessStatusCode) {
+              $content = $response.Content.ReadAsByteArrayAsync().Result
+              [System.IO.File]::WriteAllBytes($outputFile, $content)
+              Write-Host "File downloaded successfully to $outputFile"
+          } else {
+              Write-Error "Error: $($response.StatusCode) - $($response.ReasonPhrase)"
           }
         
           Write-Host "Unzipping artifact..."
