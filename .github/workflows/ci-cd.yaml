@@ -38,6 +38,7 @@ jobs:
       - name: Build Api App 🚀
         shell: PowerShell
         run: |
+          cd NET6
           $FilePath = [System.Environment]::GetEnvironmentVariable("BUILD_LOG_File_Path", "User")  
           if (-not (Test-Path $FilePath)) {
             New-Item -Path $FilePath -ItemType File -Force
