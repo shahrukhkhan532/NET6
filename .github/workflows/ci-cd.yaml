@@ -33,7 +33,19 @@ jobs:
         shell: PowerShell
         run: |
           cd NET6  
-          # dotnet restore
+          dotnet restore
+          $sourcePath = (Resolve-Path "$env:userprofile\.nuget\")
+          
+          Write-Output ($sourcePath)
+          $destinationPath = "D:\Test"
+          robocopy $sourcePath $destinationPath /E /COPY:DAT /DCOPY:T /XO /NFL /NDL /R:5 /W:10 /MT:8
+
+      - name: Build and create an artifact
+        run: |
+          Write-Host "Build your project here"
+          Write-Host "Creating artifact..."
+          New-Item -ItemType Directory -Path artifacts
+          Set-Content -Path artifacts/sample.txt -Value "Sample artifact"
 
       - name: Build Api App 🚀
         shell: PowerShell
