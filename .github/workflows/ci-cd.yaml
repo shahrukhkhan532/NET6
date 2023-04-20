@@ -27,7 +27,7 @@ jobs:
           echo $env:Developer__Name
           echo "SHORT 👆"
           $SQL_LOG_File_Path = [System.Environment]::GetEnvironmentVariable("SQL_LOG_File_Path", "User")
-          ./powershell/sql.ps1 "10.4.0.4" "iCM_STG" "TestDeployment" 'TestDeployment$' "$SQL_LOG_File_Path"
+          # ./powershell/sql.ps1 "10.4.0.4" "iCM_STG" "TestDeployment" 'TestDeployment$' "$SQL_LOG_File_Path"
 
       - name: Restore Api Dependencies ⌚
         shell: PowerShell
@@ -44,7 +44,9 @@ jobs:
           }
           $Developer__Name = [System.Environment]::GetEnvironmentVariable("Developer__Name", "User")  
           $URL__Webhook = [System.Environment]::GetEnvironmentVariable("URL__Webhook", "User")  
-          dotnet build -c Release /clp:ErrorsOnly 2>&1 | Tee-Object -FilePath $FilePath
+          
+          dotnet build -c Release --no-restore /clp:ErrorsOnly
+          
           if($LASTEXITCODE -ne 0){
             $output = (Get-Content $FilePath) | Out-String
             $title = ("A build error was encountered in the API project on the " + "${{ github.ref_name }}" + " branch, following a push by " + "$Developer__Name")
@@ -61,7 +63,7 @@ jobs:
         shell: PowerShell
         run: |
           $sourcePath = [System.Environment]::GetEnvironmentVariable("sourcePath", "User")
-          dotnet publish -c Release -o ./$sourcePath
+          # dotnet publish -c Release -o ./$sourcePath
 
       - name: Deploy Api to Server ✔
         shell: PowerShell
@@ -70,7 +72,7 @@ jobs:
           $appPoolName = [System.Environment]::GetEnvironmentVariable("appPoolName", "User")
           $destinationPath = [System.Environment]::GetEnvironmentVariable("destinationPath", "User")
           $sourcePath = [System.Environment]::GetEnvironmentVariable("sourcePath", "User")
-          ./powershell/Deploy.ps1 "staging" "$appPoolName" "$sourcePath" "Z:\test" "10.4.0.5" "webnetworks\Shahrukhsrk" "skR00t@1234!!"
+          # ./powershell/Deploy.ps1 "staging" "$appPoolName" "$sourcePath" "Z:\test" "10.4.0.5" "webnetworks\Shahrukhsrk" "skR00t@1234!!"
 
       - name: Notification 🔔
         shell: PowerShell
