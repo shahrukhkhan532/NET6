@@ -45,8 +45,8 @@ jobs:
           $downloadUrl = $artifacts.artifacts[0].archive_download_url
         
           Write-Host "Downloading artifact..."
-          Invoke-WebRequest -Uri $downloadUrl -Headers $headers -OutFile artifact2.zip -UseBasicParsing
-
+          # Invoke-WebRequest -Uri $downloadUrl -Headers $headers -OutFile artifact2.zip -UseBasicParsing
+          (New-Object System.Net.WebClient).DownloadFile($downloadUrl, "artifact2.zip")
           $url = $downloadUrl
           $outputFile = "artifact2.zip"
 
