@@ -1,5 +1,6 @@
 ## Task
-
+name: "Bug report"
+description: true
 ### Description
 Please provide a brief description of the task.
 
