@@ -27,10 +27,15 @@ jobs:
       - name: Run-Sql-Scripts 📜
         shell: PowerShell
         run: |
-          echo $env:Developer__Name
-          echo "SHORT 👆"
+          New-Item -ItemType Directory -Path 'C:\Users\runneradmin\.nuget' -Force
           $SQL_LOG_File_Path = [System.Environment]::GetEnvironmentVariable("SQL_LOG_File_Path", "User")
           # ./powershell/sql.ps1 "10.4.0.4" "iCM_STG" "TestDeployment" 'TestDeployment$' "$SQL_LOG_File_Path"
+
+      - name: Download artifact
+        uses: actions/download-artifact@v2
+        with:
+          name: my-artifact
+          path: ${{ env.artifactPath }}
 
       - name: Restore Api Dependencies ⌚
         shell: PowerShell
@@ -41,12 +46,6 @@ jobs:
           $sourcePath = (Resolve-Path "$env:userprofile\.nuget\")
           $destinationPath = "D:\Test"
           # robocopy $sourcePath $destinationPath /E /COPY:DAT /DCOPY:T /XO /NFL /NDL /R:5 /W:10 /MT:8
-
-      - name: Upload artifact
-        uses: actions/upload-artifact@v2
-        with:
-          name: my-artifact
-          path: ${{ env.artifactPath }}
 
       - name: Build Api App 🚀
         shell: PowerShell
