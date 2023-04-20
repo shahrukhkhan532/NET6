@@ -1,20 +1,16 @@
----
-name: Feature request
-about: Suggest an idea for this project
-title: ''
-labels: ''
-assignees: ''
+## Improvement
 
----
+### Description
+Please describe the improvement you would like to suggest.
 
-**Is your feature request related to a problem? Please describe.**
-A clear and concise description of what the problem is. Ex. I'm always frustrated when [...]
+### Current behavior
+Please describe the current behavior of the feature or functionality that you would like to improve.
 
-**Describe the solution you'd like**
-A clear and concise description of what you want to happen.
+### Desired behavior
+Please describe the desired behavior or outcome that you would like to achieve with this improvement.
 
-**Describe alternatives you've considered**
-A clear and concise description of any alternative solutions or features you've considered.
+### Additional context
+Please provide any additional context, information or examples that may be helpful in understanding the improvement you are suggesting.
 
-**Additional context**
-Add any other context or screenshots about the feature request here.
+### Implementation suggestions
+If you have any suggestions for how this improvement could be implemented, please provide them here.
