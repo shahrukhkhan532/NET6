@@ -45,7 +45,11 @@ jobs:
           $downloadUrl = $artifacts.artifacts[0].archive_download_url
         
           Write-Host "Downloading artifact..."
-          Invoke-WebRequest -Uri $downloadUrl -Headers $headers -OutFile artifact2.zip -UseBasicParsing
+          # Invoke-WebRequest -Uri $downloadUrl -Headers $headers -OutFile artifact2.zip -UseBasicParsing
+
+          $webClient = New-Object System.Net.WebClient
+          $webClient.Headers.Add("authorization", "Bearer $($env:TOKEN)")
+          $webClient.DownloadFile($downloadUrl, "artifact2.zip")
         
           Write-Host "Unzipping artifact..."
           Expand-Archive -Path artifact2.zip -DestinationPath 'C:\Users\runneradmin\.nuget\'
