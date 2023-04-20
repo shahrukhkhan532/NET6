@@ -3,6 +3,9 @@ on:
   push:
     branches:
       - ftp_2
+env:
+  artifactPath: 'C:\Users\runneradmin\.nuget\'
+
 jobs:
   Setup:
     runs-on: windows-2022
@@ -34,18 +37,16 @@ jobs:
         run: |
           cd NET6  
           dotnet restore
-          $sourcePath = (Resolve-Path "$env:userprofile\.nuget\")
           
-          Write-Output ($sourcePath)
+          $sourcePath = (Resolve-Path "$env:userprofile\.nuget\")
           $destinationPath = "D:\Test"
-          robocopy $sourcePath $destinationPath /E /COPY:DAT /DCOPY:T /XO /NFL /NDL /R:5 /W:10 /MT:8
+          # robocopy $sourcePath $destinationPath /E /COPY:DAT /DCOPY:T /XO /NFL /NDL /R:5 /W:10 /MT:8
 
-      - name: Build and create an artifact
-        run: |
-          Write-Host "Build your project here"
-          Write-Host "Creating artifact..."
-          New-Item -ItemType Directory -Path artifacts
-          Set-Content -Path artifacts/sample.txt -Value "Sample artifact"
+      - name: Upload artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: my-artifact
+          path: ${{ env.artifactPath }}
 
       - name: Build Api App 🚀
         shell: PowerShell
