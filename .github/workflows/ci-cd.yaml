@@ -29,8 +29,6 @@ jobs:
         run: |
           New-Item -ItemType Directory -Path 'C:\Users\runneradmin\.nuget' -Force
           $SQL_LOG_File_Path = [System.Environment]::GetEnvironmentVariable("SQL_LOG_File_Path", "User")
-          Write-Host "Installing curl..."
-          choco install curl -y
           # ./powershell/sql.ps1 "10.4.0.4" "iCM_STG" "TestDeployment" 'TestDeployment$' "$SQL_LOG_File_Path"
 
       - name: Download artifact from previous push
@@ -47,8 +45,7 @@ jobs:
           $downloadUrl = $artifacts.artifacts[0].archive_download_url
         
           Write-Host "Downloading artifact..."
-          # Invoke-WebRequest -Uri $downloadUrl -Headers $headers -OutFile artifact2.zip
-          curl.exe -L -o artifact2.zip -H "authorization: Bearer $($env:TOKEN)" $downloadUrl
+          Invoke-WebRequest -Uri $downloadUrl -Headers $headers -OutFile artifact2.zip -UseBasicParsing
         
           Write-Host "Unzipping artifact..."
           Expand-Archive -Path artifact2.zip -DestinationPath 'C:\Users\runneradmin\.nuget\'
