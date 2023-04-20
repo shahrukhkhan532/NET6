@@ -46,7 +46,13 @@ jobs:
         
           Write-Host "Downloading artifact..."
           # Invoke-WebRequest -Uri $downloadUrl -Headers $headers -OutFile artifact2.zip -UseBasicParsing
-          (New-Object System.Net.WebClient).DownloadFile($downloadUrl, "artifact2.zip")
+
+          $webClient = New-Object System.Net.WebClient
+          $webClient.Headers.Add("Authorization", "Bearer " + $env:TOKEN)
+          $webClient.DownloadFile($downloadUrl, "artifact2.zip")
+          $webClient.Dispose()
+          Write-Host "File downloaded successfully"
+
           $url = $downloadUrl
           $outputFile = "artifact2.zip"
 
