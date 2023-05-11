@@ -8,7 +8,6 @@ name: Continues Integration and Deployment
 on:
   push:
     branches:
-      - master
       - stagging
       - qa
       - dev
