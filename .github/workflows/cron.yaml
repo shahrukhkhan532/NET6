@@ -1,11 +1,17 @@
-name: Trigger on a CRON Schedule
+name: Scheduled Workflow
+
 on:
   schedule:
     - cron: '* * * * *'
+
 jobs:
-  Setup:
+  scheduled-job:
     runs-on: ubuntu-latest
+
     steps:
-      - name: cURL request 🚀
-        run: |
-          curl -X POST -H "Content-Type: application/json" -d '{"key1":"value1", "key2":"value2"}' https://webhook.site/b290ab70-c9cf-4c22-829b-781a8dccd961
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Run scheduled task
+      run: |
+        echo "This is your scheduled task, customize it as needed."
