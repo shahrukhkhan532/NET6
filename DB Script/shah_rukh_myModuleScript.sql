@@ -1,1 +1,1 @@
-SELECT TOP 10 * FROM [User];
+SELECT TOP 10 * FROM [Residents];
