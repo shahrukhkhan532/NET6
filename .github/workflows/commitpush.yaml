@@ -1,0 +1,53 @@
+# For auto generating this yaml file for .NET project run these command sequencely
+#dotnet new workflow --search
+#dotnet new --install TimHeuer.GitHubActions.Templates
+#dotnet new workflow
+
+name: Continues Integration and Deployment
+
+on:
+  push:
+    branches:
+      - master
+
+env:
+  DOTNET_VERSION: '6.0.x'
+  AZURE_WEB_APP_NAME: rainers-first-webapp
+
+jobs:
+  build_test_deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check Out Code 🚓
+        uses: actions/checkout@v3
+      
+      - name: Make changes
+        run: |
+          # echo "Hello, World!" >> hello.txt
+
+          repository_root=$(git rev-parse --show-toplevel)
+          all_changed_files=$(git diff --cached --name-only --diff-filter=ACM)
+          destination_folder="$repository_root/DB Script/"
+
+          IFS=$'\n' # Set Internal Field Separator to newline for iteration
+          for file in $all_changed_files
+          do
+            if [[ $file == *.sql ]]
+            then
+              full_path="$repository_root/$file"
+              echo "SQL file has been changed: $full_path"
+              # Your logic here
+              cp "$full_path" "$destination_folder"
+            fi
+          done
+          IFS=$' ' # Reset IFS to default (space)
+
+      - name: Commit and push
+        run: |
+          git config --global user.name 'shahrukhkhan532'
+          git config --global user.email 'khanxhahrukh@gmail.com'
+          
+          git remote set-url origin https://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@github.com/shahrukhkhan532/NET6.git
+          git add -A
+          git commit -m "Automated commit from GitHub Actions"
+          git push
