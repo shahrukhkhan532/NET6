@@ -22,7 +22,26 @@ jobs:
         uses: actions/checkout@v3
       
       - name: Make changes
-        run: echo "Hello, World!" >> hello.txt
+      - shell: bash
+        run: |
+          # echo "Hello, World!" >> hello.txt
+          
+          repository_root=$(git rev-parse --show-toplevel)
+          all_changed_files=$(git diff --cached --name-only --diff-filter=ACM)
+          destination_folder="$repository_root/DB Script/"
+
+          IFS=$'\n' # Set Internal Field Separator to newline for iteration
+          for file in $all_changed_files
+          do
+            if [[ $file == *.sql ]]
+            then
+              full_path="$repository_root/$file"
+              echo "SQL file has been changed: $full_path"
+              # Your logic here
+              cp "$full_path" "$destination_folder"
+            fi
+          done
+          IFS=$' ' # Reset IFS to default (space)
 
       - name: Commit and push
         run: |
